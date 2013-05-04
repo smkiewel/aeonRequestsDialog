@@ -47,7 +47,7 @@
             'template':'<div style="display:none"><div id="aeon_request_dialog" title="<%= this.title %>" class="aeon_request">' +
                           '<form method="POST" action="<%= this.url %>" id="aeon_request_form">' +
                             '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
-                            '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" id="aeon_request_RequestType"/>' +
+                            '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" id="aeon_request_RequestType" />' +
                             '<% for (var x=0; x < this.globalFields.length; x++ ) { %>' +
                               '<input name="<%= this.globalFields[x].name %>" type="hidden" value="<%= this.globalFields[x].value %>" />' +
                             '<% } %>' +
@@ -160,9 +160,44 @@
             //checkbox selector
             'checkboxSelector': '.aeon_check',
 
+            //initialize the dialog's events and widgets and other custom code
+            initDialog: function (){
+              $('#datepicker').datepicker({minDate:0}).val($.datepicker.formatDate('mm/dd/yy',new Date()));
+
+              $('#aeon_request_copy').on( 'change.aeonRequestsDialog', function(){
+                if ( this.checked ) {
+                  $('#aeon_request_RequestType').val('Copy');
+                } else {
+                  $('#aeon_request_RequestType').val('Loan');
+                }
+              });
+
+              $('.schedule_opt').on( 'change.aeonRequestsDialog', function() {
+                if ( this.checked && this.value === 'Yes' ) {
+                  $('#datepicker').prop('disabled','disabled');
+                  $('.scheduled_date').addClass('disabled');
+                  $('.review').removeClass('disabled');
+                } else {
+                  $('#datepicker').prop('disabled','');
+                  $('.scheduled_date').removeClass('disabled');
+                  $('.review').addClass('disabled');
+                }
+              });
+
+              $('#dialog_reset_button').on('click.aeonRequestsDialog', function(){
+                $('#aeon_request_dialog').dialog('close');
+                settings.items[0].fields[0].label = 'new name';
+                $this.data('aeonRequestsDialog', {settings:settings})
+              });
+            },
+
+            destroyDialog: function (){
+              $('#datepicker').datepicker('destroy');
+            }
+
           }, options);
 
-          $(settings.submitButtonSelector).on('click.aeonRequestsDialog', function (e) {
+          $(settings.submitButtonSelector).on('click.aeonRequestsDialogMain', function (e) {
             e.preventDefault();
             e.stopPropagation();
             methods['show'].apply($this, []);
@@ -176,54 +211,41 @@
         }
       });
     },
-    destroy : function( ) {
+    destroy : function() {
       return this.each(function(){
         var $this = $(this),
              data = $this.data('aeonRequestsDialog');
 
-        $(window).off('.aeonRequestsDialog');
+        $(window).off('.aeonRequestsDialogMain');
         $this.removeData('aeonRequestsDialog');
       })
     },
     _onSubmit: function(){
-      return this.data('aeonRequestsDialog').settings.onSubmit.apply();
+      return this.data('aeonRequestsDialog').settings.onSubmit();
     },
-    show : function(e) {
-      return this.each(function(e){
-//console.log( e)
-        //e.preventDefault();
+    show : function() {
+      return this.each(function(){
         var $this = $(this),
              data = $this.data('aeonRequestsDialog');
         var settings = data.settings;
-//console.log(this);
+
+        //get data from form
         if ( settings.datasource === 'form' ) {
 
         }
 
+        //expand templates
         $('#dialog_wrapper').jqotesub(settings.template, settings);
-        //$(settings.items_attachpoint_selector).replaceWith( $(settings.items_template).jqote(settings));
-//        console.log(        $(settings.items_template).jqotesub(settings));
-//console.log(settings.items_template);
         $(settings.items_attachpoint_selector).jqotesub(settings.items_template,settings);
-        $('#datepicker').datepicker({minDate:0}).val($.datepicker.formatDate('mm/dd/yy',new Date()));
-        $('#aeon_request_dialog').dialog({modal:true, minWidth: 850,autoOpen:false});
-        $('#dialog_reset_button').on('click.aeonRequestsDialog', function(){ $('#aeon_request_dialog').dialog('destroy');settings.items[0].fields[0].label = 'new name';$this.data('aeonRequestsDialog', {settings:settings}) });
-        $('.schedule_opt').on( 'change.aeonRequestsDialog', function() {
-          if ( this.checked && this.value === 'Yes' ) {
-            $('#datepicker').prop('disabled','disabled');
-            $('.scheduled_date').addClass('disabled');
-            $('.review').removeClass('disabled');
-          } else {
-            $('#datepicker').prop('disabled','');
-            $('.scheduled_date').removeClass('disabled');
-            $('.review').addClass('disabled');
-          }
-        });
+
+        //setup dialog TODO - settings for min/max width/height
+        $('#aeon_request_dialog').dialog({modal:true, minWidth: 850,autoOpen:false,
+                                         close: function(){ settings.destroyDialog(); $(window).off('.aeonRequestsDialog'); $('#aeon_request_dialog').dialog('destroy'); } });
+        settings.initDialog();
+
         $('#aeon_request_dialog').dialog('open');
       });
-    },
-    hide : function() {},
-    update : function( content ) {}
+    }
   };
 
   $.fn.aeonRequestsDialog = function( method ) {
