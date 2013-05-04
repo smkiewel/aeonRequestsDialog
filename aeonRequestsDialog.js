@@ -251,6 +251,10 @@
           settings = $.extend(settings,arguments[0]);
         }
         else if (typeof arguments[0] === "string" ) {
+          if ( undefined === settings[arguments[0]] ) {
+            console.log("Unknown key sent to arguments.");
+            return null;
+          }
           return settings[arguments[0]];
         }
         else {
