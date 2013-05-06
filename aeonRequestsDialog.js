@@ -23,9 +23,6 @@
           //  3) custom: provide custom data processing
           'datasource': 'form',
 
-          //id of form for form processing
-          'form': 'aeon_request_form',
-
           //fields common to all requests
           'globalFields': [],
 
@@ -186,8 +183,6 @@
 
             $('#dialog_reset_button').on('click.aeonRequestsDialog', function(){
               $('#aeon_request_dialog').dialog('close');
-              settings.items[0].fields[0].label = 'new name';
-              $this.data('aeonRequestsDialog', {settings:settings})
             });
           },
 
@@ -197,7 +192,44 @@
             $('#datepicker').datepicker('destroy');
           },
 
-          beforeDialogDestroy: function(){}
+          beforeDialogDestroy: function(){},
+
+          //id of form for form processing
+          'form': 'EADRequest',
+
+          //selector for checked items
+          'checkedItemSelector':'input[name="Request"]:checked',
+
+          //called for form processing
+          'processForm': function (){
+            var settings = $this.data('aeonRequestsDialog').settings;
+            settings.items = [];
+
+
+            $(settings.checkedItemSelector).each(function(){
+              var id = $(this).val();
+              var i = { 'fields': [] };
+              for (var x=0;x<settings.itemFields.length;x++) {
+                var f = {
+                  'name':settings.itemFields[x].name,
+                  'label':settings.itemFields[x].label,
+                  'value': settings.cleanValues(document.forms[settings.form][settings.itemFields[x].name + '_' + id ].value )
+                };
+                i.fields.push(f);
+              }
+              settings.items.push(i);
+            });
+
+            for( var x=0; x<settings.globalFields.length; x++){
+              settings.globalFields[x].value = settings.cleanValues( document.forms[settings.form][settings.globalFields[x].name].value );
+            }
+
+            $this.data('aeonRequestsDialog', { settings: settings });
+          },
+
+          'cleanValues': function(s){
+            return s.replace(/(^\s*)|(\s*$)/g, "").replace(/(\n|\t)/g, '');
+          }
 
         }, options);
 
@@ -232,7 +264,7 @@
 
       //get data from form
       if ( settings.datasource === 'form' ) {
-
+        settings.processForm();
       }
 
       //expand templates
@@ -248,6 +280,7 @@
           settings.destroyDialog();
           $(window).off('.aeonRequestsDialog');
           $('#aeon_request_dialog').dialog('destroy');
+          $('#aeon_request_dialog').html('');
         }
       }
 
