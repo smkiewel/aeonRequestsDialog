@@ -23,8 +23,8 @@
           //  3) custom: provide custom data processing
           'datasource': 'form',
 
-          //name of form for form processing
-          'form': 'EADRequest',
+          //id of form for form processing
+          'form': 'aeon_request_form',
 
           //fields common to all requests
           'globalFields': [],
@@ -42,8 +42,7 @@
           'json_callback': null,
 
           //jqote template for dialog
-          'template':'<div style="display:none"><div id="aeon_request_dialog" title="<%= this.title %>" class="aeon_request">' +
-                        '<form method="POST" action="<%= this.url %>" id="aeon_request_form">' +
+          'template':'<form method="POST" action="<%= this.url %>" id="aeon_request_form">' +
                           '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
                           '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" id="aeon_request_RequestType" />' +
                           '<% for (var x=0; x < this.globalFields.length; x++ ) { %>' +
@@ -87,7 +86,7 @@
                           '</div>' +
                           '<div class="buttons">' +
                             '<% if ( this.buttonsMessage ) { %>' +
-                              '<div class="requestDesc"><%= this.buttonsMessage %></div>' +
+                              '<div class="buttonMessage"><%= this.buttonsMessage %></div>' +
                             '<% } %>' +
                             '<input name="SubmitButton" type="submit" value="Submit Request" id="dialog_submit_button" />' +
                             '<input type="reset" value="Cancel" id="dialog_reset_button" />' +
@@ -95,8 +94,7 @@
                           '<% if ( this.footer ) { %>' +
                             '<div class="aeon_footer"><%= this.footer %></div>' +
                           '<% } %>' +
-                        '</form>' +
-                      '</div></div>',
+                        '</form>',
 
           //jqote template for items
           'items_template':'<div>' +
@@ -158,17 +156,21 @@
           //checkbox selector
           'checkboxSelector': '.aeon_check',
 
+          'minWidth': 750,
+
           //initialize the dialog's events and widgets and other custom code
-          initDialog: function (){
+          createDialog: function (){
             $('#datepicker').datepicker({minDate:0}).val($.datepicker.formatDate('mm/dd/yy',new Date()));
 
-            $('#aeon_request_copy').on( 'change.aeonRequestsDialog', function(){
-              if ( this.checked ) {
-                $('#aeon_request_RequestType').val('Copy');
-              } else {
-                $('#aeon_request_RequestType').val('Loan');
-              }
-            });
+            if ( settings.copyOption ) {
+              $('#aeon_request_copy').on( 'change.aeonRequestsDialog', function(){
+                if ( this.checked ) {
+                  $('#aeon_request_RequestType').val('Copy');
+                } else {
+                  $('#aeon_request_RequestType').val('Loan');
+                }
+              });
+            }
 
             $('.schedule_opt').on( 'change.aeonRequestsDialog', function() {
               if ( this.checked && this.value === 'Yes' ) {
@@ -189,9 +191,13 @@
             });
           },
 
+          afterDialogCreate: function(){},
+
           destroyDialog: function (){
             $('#datepicker').datepicker('destroy');
-          }
+          },
+
+          beforeDialogDestroy: function(){}
 
         }, options);
 
@@ -205,6 +211,8 @@
           settings: settings
         });
       }
+
+      $('body').jqoteapp('<div style="display:none"><div id="aeon_request_dialog" title="<%= this.title %>" class="aeon_request"></div></div>',settings);
 
       return this;
     },
@@ -228,14 +236,38 @@
       }
 
       //expand templates
-      $('#dialog_wrapper').jqotesub(settings.template, settings);
+      $('#aeon_request_dialog').jqotesub(settings.template, settings);
       $(settings.items_attachpoint_selector).jqotesub(settings.items_template,settings);
 
       //setup dialog TODO - settings for min/max width/height
-      $('#aeon_request_dialog').dialog({modal:true, minWidth: 850,autoOpen:false,
-                                       close: function(){ settings.destroyDialog(); $(window).off('.aeonRequestsDialog'); $('#aeon_request_dialog').dialog('destroy'); } });
-      settings.initDialog();
+      var opts = {
+        modal:true,
+        autoOpen:false,
+        close: function(){
+          settings.beforeDialogDestroy();
+          settings.destroyDialog();
+          $(window).off('.aeonRequestsDialog');
+          $('#aeon_request_dialog').dialog('destroy');
+        }
+      }
 
+      var f = [ 'height','width'];
+      var f2 = [ 'min', 'max' ];
+      for (var x=0;x < 2; x++) {
+        if (settings[f[x]]) {
+          opts[f[x]] = settings[f[x]];
+          continue;
+        }
+        for (var y=0;y<2;y++) {
+          var s = f2[y] + f[x].charAt(0).toUpperCase() + f[x].slice(1);
+          if (settings[s]) {
+            opts[s] = settings[s];
+          }
+        }
+      }
+      $('#aeon_request_dialog').dialog(opts);
+      settings.createDialog();
+      settings.afterDialogCreate();
       $('#aeon_request_dialog').dialog('open');
 
       return this;
