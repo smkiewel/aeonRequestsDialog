@@ -1,7 +1,7 @@
 .aeon_request .label { font-weight: bold; }
 .aeon_request .requestItem { padding: 1em 0; }
 .aeon_request .requestDesc { margin-left: 1.5em; }
-.aeon_request .request_for, .aeon_request .notes, .aeon_request .scheduled_date, .aeon_request .review, .aeon_request .buttons, .aeon_request .copy_opt { padding-bottom: 1em; }
+.aeon_request .request_for, .aeon_request .notes, .aeon_request .scheduled_date, .aeon_request .review, .aeon_request .buttons, .aeon_request .simple_copy_opt { padding-bottom: 1em; }
 .aeon_request .request_inputs { float:left; }
 .aeon_request .rev_sched_opt { float:left; clear:left; margin-right: 1em; height: 3em; }
 .aeon_request .buttons { clear:both; }

@@ -6,6 +6,11 @@
       // If the plugin hasn't been initialized yet
       if ( ! data ) {
         var settings = $.extend( {
+          //dialog id
+          'dialogId': 'aeon_request_dialog',
+
+          'useDefaultBindings': true,
+
           //aeon url
           'url': '',
 
@@ -40,40 +45,41 @@
 
           //jqote template for dialog
           'template':'<form method="POST" action="<%= this.url %>" id="aeon_request_form">' +
-                          '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
-                          '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" id="aeon_request_RequestType" />' +
-                          '<% for (var x=0; x < this.globalFields.length; x++ ) { %>' +
-                            '<input name="<%= this.globalFields[x].name %>" type="hidden" value="<%= this.globalFields[x].value %>" />' +
-                          '<% } %>' +
-                          '<% if ( this.header ) { %>' +
-                            '<div class="aeon_request_header"><%= this.header %></div>' +
-                          '<% } %>' +
-                          '<div id="aeon_request_items"></div>' +
-                          '<% if ( this.copyOption ) { %>' +
-                            '<div class="copy_opt">' +
-                              '<div id="aeon_request_copy_opt" class="request_inputs">' +
-                                '<input type="checkbox" id="aeon_request_copy" value="Yes"/>' +
-                              '</div>' +
-                              '<div class="requestDesc"><label for="aeon_request_copy"><span class="label"><%= this.copyLabel %></span></label></div>' +
-                              '<% if ( this.copyMessage ) { %>' +
-                                '<div class="requestDesc"><%= this.copyMessage %></div>' +
-                              '<% } %>' +
+                        '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
+                        '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" />' +
+                        '<% for (var x=0; x < this.globalFields.length; x++ ) { %>' +
+                          '<input name="<%= this.globalFields[x].name %>" type="hidden" value="<%= this.globalFields[x].value %>" />' +
+                        '<% } %>' +
+                        '<% if ( this.header ) { %>' +
+                          '<div class="aeon_request_header"><%= this.header %></div>' +
+                        '<% } %>' +
+                        '<div class="aeon_request_items"></div>' +
+                        '<% if ( this.includeSimpleCopyOption ) { %>' +
+                          '<div class="simple_copy_opt">' +
+                            '<div class="request_inputs">' +
+                              '<input type="checkbox" class="copy_check" value="Yes"/>' +
                             '</div>' +
-                          '<% } %>' +
-                          '<% if ( this.notes ) { %>' +
-                            '<div class="notes">' +
-                              '<% if ( this.notesMessage ) { %>' +
-                                '<label for="Notes"><span class="label"><%= this.notesMessage %></span></label><br/>' +
-                              '<% } %>' +
-                              '<textarea name="Notes" cols="60" rows="4"></textarea>' +
-                            '</div>' +
-                          '<% } %>' +
+                            '<div class="requestDesc"><label for="aeon_request_copy"><span class="label"><%= this.simpleCopyLabel %></span></label></div>' +
+                            '<% if ( this.simpleCopyMessage ) { %>' +
+                              '<div class="requestDesc"><%= this.simpleCopyMessage %></div>' +
+                            '<% } %>' +
+                          '</div>' +
+                        '<% } %>' +
+                        '<% if ( this.includeNotes ) { %>' +
+                          '<div class="notes">' +
+                            '<% if ( this.notesMessage ) { %>' +
+                              '<label for="Notes"><span class="label"><%= this.notesMessage %></span></label><br/>' +
+                            '<% } %>' +
+                            '<textarea name="Notes" cols="60" rows="4"></textarea>' +
+                          '</div>' +
+                        '<% } %>' +
+                        '<% if (this.includeScheduledDate) { %>' +
                           '<div class="rev_sched_opt">' +
                             '<input type="radio" name="UserReview" id="scheduled_date_radio" class="schedule_opt" value="No" checked="checked"/>' +
                           '</div>' +
                           '<div class="scheduled_date">' +
                             '<label for="scheduled_date_radio"><span class="label"><%= this.scheduledDateLabel %></span></label><br/>' +
-                            '<input type="text" id="datepicker"/>' +
+                            '<input type="text" class="datepicker"/>' +
                           '</div>' +
                           '<div class="rev_sched_opt">' +
                             '<input type="radio" name="UserReview" id="user_review_radio" value="Yes" class="schedule_opt"/>' +
@@ -81,20 +87,21 @@
                           '<div class="review disabled">' +
                             '<label for="user_review_radio"><%= this.userReviewLabel %></label>' +
                           '</div>' +
-                          '<div class="buttons">' +
-                            '<% if ( this.buttonsMessage ) { %>' +
-                              '<div class="buttonMessage"><%= this.buttonsMessage %></div>' +
-                            '<% } %>' +
-                            '<input name="SubmitButton" type="submit" value="Submit Request" id="dialog_submit_button" />' +
-                            '<input type="reset" value="Cancel" id="dialog_reset_button" />' +
-                          '</div>' +
-                          '<% if ( this.footer ) { %>' +
-                            '<div class="aeon_footer"><%= this.footer %></div>' +
+                        '<% } %>' +
+                        '<div class="buttons">' +
+                          '<% if ( this.buttonsMessage ) { %>' +
+                            '<div class="buttonMessage"><%= this.buttonsMessage %></div>' +
                           '<% } %>' +
-                        '</form>',
+                          '<input name="SubmitButton" type="submit" value="Submit Request" class="dialog_submit"/>' +
+                          '<input type="reset" value="Cancel" class="dialog_cancel"/>' +
+                        '</div>' +
+                        '<% if ( this.footer ) { %>' +
+                          '<div class="aeon_footer"><%= this.footer %></div>' +
+                        '<% } %>' +
+                      '</form>',
 
           //jqote template for items
-          'items_template':'<div>' +
+          'items_template': '<div>' +
                               '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
                                 '<div class="requestItem" style="clear:both">' +
                                   '<div class="request_inputs">' +
@@ -113,7 +120,7 @@
                             '</div>',
 
           //selector for attachpoint of items
-          'items_attachpoint_selector': '#aeon_request_items',
+          'items_attachpoint_selector': '.aeon_request_items',
 
           //dialog title
           'title': 'Confirm your request',
@@ -122,10 +129,12 @@
           'header': '',
 
           //include notes?
-          'notes': true,
+          'includeNotes': true,
 
           //notes message
           'notesMessage': 'Please include any notes that might help us identify the specific items requested or any other pertinent information:',
+
+          'includeScheduledDate':true,
 
           //scheduled date label
           'scheduledDateLabel': 'Scheduled Date',
@@ -140,12 +149,9 @@
           'footer': '<i>* Requested items will be grouped by container in the Aeon system.</i>',
 
           //copy options
-          'copyOption': false,
-          'copyLabel': 'Requesting Duplication of Material',
-          'copyMessage': '',
-
-          //submit hook
-          'onSubmit': function(){return true;},
+          'includeSimpleCopyOption': false,
+          'simpleCopyLabel': 'Requesting Duplication of Material',
+          'simpleCopyMessage': '',
 
           //selector of button used to show dialog
           'submitButtonSelector': '.aeon_submit',
@@ -155,44 +161,10 @@
 
           'minWidth': 750,
 
-          //initialize the dialog's events and widgets and other custom code
-          createDialog: function (){
-            $('#datepicker').datepicker({minDate:0}).val($.datepicker.formatDate('mm/dd/yy',new Date()));
-
-            if ( settings.copyOption ) {
-              $('#aeon_request_copy').on( 'change.aeonRequestsDialog', function(){
-                if ( this.checked ) {
-                  $('#aeon_request_RequestType').val('Copy');
-                } else {
-                  $('#aeon_request_RequestType').val('Loan');
-                }
-              });
-            }
-
-            $('.schedule_opt').on( 'change.aeonRequestsDialog', function() {
-              if ( this.checked && this.value === 'Yes' ) {
-                $('#datepicker').prop('disabled','disabled');
-                $('.scheduled_date').addClass('disabled');
-                $('.review').removeClass('disabled');
-              } else {
-                $('#datepicker').prop('disabled','');
-                $('.scheduled_date').removeClass('disabled');
-                $('.review').addClass('disabled');
-              }
-            });
-
-            $('#dialog_reset_button').on('click.aeonRequestsDialog', function(){
-              $('#aeon_request_dialog').dialog('close');
-            });
-          },
-
-          afterDialogCreate: function(){},
-
-          destroyDialog: function (){
-            $('#datepicker').datepicker('destroy');
-          },
-
-          beforeDialogDestroy: function(){},
+          //event hooks
+          createDialog: function(){},
+          destroyDialog: function (){},
+          onSubmit: function(){},
 
           //id of form for form processing
           'form': 'EADRequest',
@@ -200,32 +172,6 @@
           //selector for checked items
           'checkedItemSelector':'input[name="Request"]:checked',
 
-          //called for form processing
-          'processForm': function (){
-            var settings = $this.data('aeonRequestsDialog').settings;
-            settings.items = [];
-
-
-            $(settings.checkedItemSelector).each(function(){
-              var id = $(this).val();
-              var i = { 'fields': [] };
-              for (var x=0;x<settings.itemFields.length;x++) {
-                var f = {
-                  'name':settings.itemFields[x].name,
-                  'label':settings.itemFields[x].label,
-                  'value': settings.cleanValues(document.forms[settings.form][settings.itemFields[x].name + '_' + id ].value )
-                };
-                i.fields.push(f);
-              }
-              settings.items.push(i);
-            });
-
-            for( var x=0; x<settings.globalFields.length; x++){
-              settings.globalFields[x].value = settings.cleanValues( document.forms[settings.form][settings.globalFields[x].name].value );
-            }
-
-            $this.data('aeonRequestsDialog', { settings: settings });
-          },
 
           'cleanValues': function(s){
             return s.replace(/(^\s*)|(\s*$)/g, "").replace(/(\n|\t)/g, '');
@@ -236,7 +182,7 @@
         $(settings.submitButtonSelector).on('click.aeonRequestsDialogMain', function (e) {
           e.preventDefault();
           e.stopPropagation();
-          methods['show'].apply($this, []);
+          methods['show'].apply($this, null);
         });
 
         $(this).data('aeonRequestsDialog', {
@@ -244,43 +190,36 @@
         });
       }
 
-      $('body').jqoteapp('<div style="display:none"><div id="aeon_request_dialog" title="<%= this.title %>" class="aeon_request"></div></div>',settings);
+      $('body').jqoteapp('<div style="display:none"><div id="<%= this.dialogId %>" title="<%= this.title %>" class="aeon_request"></div></div>',settings);
 
       return this;
-    },
-    destroy : function() {
-      var data = this.data('aeonRequestsDialog');
-
-      $(window).off('.aeonRequestsDialogMain');
-      $this.removeData('aeonRequestsDialog');
-      return this;
-    },
-    _onSubmit: function(){
-      return this.data('aeonRequestsDialog').settings.onSubmit();
     },
     show : function() {
-      var data = this.data('aeonRequestsDialog');
-      var settings = data.settings;
+      var settings = this.data('aeonRequestsDialog').settings;
+      var $this = this;
 
       //get data from form
       if ( settings.datasource === 'form' ) {
-        settings.processForm();
+        methods['processForm'].apply(this,null);
       }
 
       //expand templates
-      $('#aeon_request_dialog').jqotesub(settings.template, settings);
-      $(settings.items_attachpoint_selector).jqotesub(settings.items_template,settings);
+      var $dialog = $('#'+ settings.dialogId);
+      $dialog.jqotesub(settings.template, settings);
+      $('#' + settings.dialogId + " " + settings.items_attachpoint_selector).jqotesub(settings.items_template,settings);
 
-      //setup dialog TODO - settings for min/max width/height
+      //setup dialog
       var opts = {
         modal:true,
         autoOpen:false,
         close: function(){
-          settings.beforeDialogDestroy();
+          if ( settings.useDefaultBindings ) {
+            methods['_defaultDestroyDialog'].apply($this,null);
+          }
           settings.destroyDialog();
           $(window).off('.aeonRequestsDialog');
-          $('#aeon_request_dialog').dialog('destroy');
-          $('#aeon_request_dialog').html('');
+          $dialog.dialog('destroy');
+          $dialog.html('');
         }
       }
 
@@ -298,12 +237,89 @@
           }
         }
       }
-      $('#aeon_request_dialog').dialog(opts);
+      $dialog.dialog(opts);
+      if ( settings.useDefaultBindings ) {
+        methods['_defaultCreateDialog'].apply(this,null);
+      }
       settings.createDialog();
-      settings.afterDialogCreate();
-      $('#aeon_request_dialog').dialog('open');
+      $dialog.dialog('open');
 
       return this;
+    },
+    _defaultCreateDialog: function (){
+      var $this = this;
+      var settings = this.data('aeonRequestsDialog').settings;
+      var idSelector = '#' + settings.dialogId;
+      $( idSelector +  ' .datepicker').datepicker({minDate:0}).val($.datepicker.formatDate('mm/dd/yy',new Date()));
+
+      if ( settings.includeSimpleCopyOption ) {
+        $(idSelector + ' .copy_check').on( 'change.aeonRequestsDialog' + idSelector, function(){
+          if ( this.checked ) {
+            $( idSelector + ' input[name="RequestType"]').val('Copy');
+          } else {
+            $( idSelector + ' input[name="RequestType"]').val('Loan');
+          }
+        });
+      }
+
+      if ( settings.includeScheduledDate ) {
+        $( idSelector + ' .schedule_opt').on( 'change.aeonRequestsDialog' + idSelector, function() {
+          if ( this.checked && this.value === 'Yes' ) {
+            $(idSelector + ' .datepicker').prop('disabled','disabled');
+            $(idSelector + ' .scheduled_date').addClass('disabled');
+            $(idSelector + ' .review').removeClass('disabled');
+          } else {
+            $(idSelector + ' .datepicker').prop('disabled','');
+            $(idSelector + ' .scheduled_date').removeClass('disabled');
+            $(idSelector + ' .review').addClass('disabled');
+          }
+        });
+      }
+
+      $(idSelector + ' .dialog_submit').on('click.aeonRequestsDialog' + idSelector,function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var settings = $this.data('aeonRequestDialog').settings;
+        if ( !settings.beforeOnSubmit() ) {
+          return;
+        }
+        if ( !settings.onSubmit() ) {
+          return;
+        }
+
+      });
+
+      $( idSelector + ' .dialog_cancel').on('click.aeonRequestsDialog' + idSelector, function(){
+        $(idSelector).dialog('close');
+      });
+    },
+    _defaultDestroyDialog: function (){
+      var settings = this.data('aeonRequestsDialog').settings;
+      $('#' + settings.dialogId + ' .datepicker').datepicker('destroy');
+      $(window).off('.aeonRequestsDialog#'+settings.dialogId);
+    },
+    'processForm': function (){
+      var settings = this.data('aeonRequestsDialog').settings;
+      settings.items = [];
+      $(settings.checkedItemSelector).each(function(){
+        var id = $(this).val();
+        var i = { 'fields': [] };
+        for (var x=0;x<settings.itemFields.length;x++) {
+          var f = {
+            'name':settings.itemFields[x].name,
+            'label':settings.itemFields[x].label,
+            'value': settings.cleanValues(document.forms[settings.form][settings.itemFields[x].name + '_' + id ].value )
+          };
+          i.fields.push(f);
+        }
+        settings.items.push(i);
+      });
+
+      for( var x=0; x<settings.globalFields.length; x++){
+        settings.globalFields[x].value = settings.cleanValues( document.forms[settings.form][settings.globalFields[x].name].value );
+      }
+
+      this.data('aeonRequestsDialog', { settings: settings });
     },
     options: function(){
       var settings = this.data('aeonRequestsDialog').settings;
@@ -338,6 +354,13 @@
       }
 
       this.data('aeonRequestsDialog', {settings:settings});
+      return this;
+    },
+    destroy : function() {
+      var data = this.data('aeonRequestsDialog');
+
+      $(window).off('.aeonRequestsDialogMain');
+      $this.removeData('aeonRequestsDialog');
       return this;
     }
   };
