@@ -70,6 +70,39 @@
                             '<% } %>' +
                           '</div>' +
                         '<% } %>' +
+                        '<% if ( this.includeAdvancedCopyOptions ) { %>' +
+                          '<div class="advanced_copy_opt">' +
+                            '<div class="adv_copy_message"><%= this.advancedCopyMessage %></div>' +
+                            '<div class="adv_copy_element">' +
+                              '<label for="Format" class="label"><%= this.formatLabel %></label>' +
+                              '<select name="Format" class="adv_copy_select">' +
+                                '<% for ( var x=0; x < this.formatOptions.length; x++ ) { %>' +
+                                  '<option><%= this.formatOptions[x] %></option>'+
+                                '<% } %>' +
+                              '</select>' +
+                            '</div>' +
+                            '<div class="adv_copy_element">' +
+                              '<label for="ServiceLevel" class="label"><%= this.serviceLevelLabel %></label>' +
+                              '<select name="ServiceLevel" class="adv_copy_select">' +
+                                '<% for ( var x=0; x < this.serviceLevelOptions.length; x++ ) { %>' +
+                                  '<option><%= this.serviceLevelOptions[x] %></option>'+
+                                '<% } %>' +
+                              '</select>' +
+                            '</div>' +
+                            '<div class="adv_copy_element">' +
+                              '<label for="ShippingOption" class="label"><%= this.shippingOptionLabel %></label>' +
+                              '<select name="ShippingOption" class="adv_copy_select">' +
+                                '<% for ( var x=0; x < this.shippingOptions.length; x++ ) { %>' +
+                                  '<option><%= this.shippingOptions[x] %></option>'+
+                                '<% } %>' +
+                              '</select>' +
+                            '</div>' +
+                            '<div class="adv_copy_element">' +
+                              '<label for="ForPublication" class="label"><%= this.forPublicationLabel %></label>' +
+                              '<input name="ForPublication" type="checkbox" value="Yes">' +
+                            '</div>' +
+                          '</div>' +
+                        '<% } %>' +
                         '<% if ( this.includeNotes ) { %>' +
                           '<div class="notes">' +
                             '<% if ( this.notesMessage ) { %>' +
@@ -153,10 +186,21 @@
           //footer messgae
           'footer': '<i>* Requested items will be grouped by container in the Aeon system.</i>',
 
-          //copy options
+          //simple copy options
           'includeSimpleCopyOption': false,
           'simpleCopyLabel': 'Requesting Duplication of Material',
           'simpleCopyMessage': '',
+
+          //advanced copy options
+          'includeAdvancedCopyOptions':false,
+          'advancedCopyMessage': '',
+          'formatLabel': 'Format',
+          'formatOptions': [ 'Photocopy', 'Scan (DVD/CD)', 'Scan (Electronic Delivery)' ],
+          'serviceLevelLabel': 'Intended Use',
+          'serviceLevelOptions':['Advertisement (Commercial)', 'Advertisement (PSA)', 'Educational Use', 'Government', 'Live Presentation', 'Museum Use', 'Non Profit', 'Personal Use', 'Preservation Use'],
+          'shippingOptionLabel': 'Shipping Option',
+          'shippingOptions': ['Download/FTP (User Provided)', 'Download/FTP (Institution Provided)', 'Pick up Onsite', 'Fed Ex (User Account)', 'UPS (User Account)', 'USPS (First Class)', 'USPS (Overseas)' ],
+          'forPublicationLabel': 'For Publication',
 
           //selector of button used to show dialog
           'submitButtonSelector': '.aeon_submit',
@@ -183,6 +227,10 @@
           }
 
         }, options);
+
+        if ( settings.includeAdvancedCopyOptions ) {
+          settings.RequestType = 'Copy';
+        }
 
         $(settings.submitButtonSelector).on('click.aeonRequestsDialogMain', function (e) {
           e.preventDefault();
