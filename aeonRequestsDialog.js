@@ -11,6 +11,10 @@
 
           'useDefaultBindings': true,
 
+          'compressRequests': false,
+          'compressRequestsField': 'ItemNumber',
+
+
           //aeon url
           'url': '',
 
@@ -44,9 +48,10 @@
           'json_callback': null,
 
           //jqote template for dialog
-          'template':'<form method="POST" action="<%= this.url %>" id="aeon_request_form">' +
+          'template':'<form method="POST" action="<%= this.url %>" class="aeon_request_form" target="_self" name="<%= this.AeonForm %>">' +
                         '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
                         '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" />' +
+                        '<input name="SubmitButton" value="Submit Request" type="hidden" />' +
                         '<% for (var x=0; x < this.globalFields.length; x++ ) { %>' +
                           '<input name="<%= this.globalFields[x].name %>" type="hidden" value="<%= this.globalFields[x].value %>" />' +
                         '<% } %>' +
@@ -79,7 +84,7 @@
                           '</div>' +
                           '<div class="scheduled_date">' +
                             '<label for="scheduled_date_radio"><span class="label"><%= this.scheduledDateLabel %></span></label><br/>' +
-                            '<input type="text" class="datepicker"/>' +
+                            '<input type="text" class="datepicker"  name="ScheduledDate"/>' +
                           '</div>' +
                           '<div class="rev_sched_opt">' +
                             '<input type="radio" name="UserReview" id="user_review_radio" value="Yes" class="schedule_opt"/>' +
@@ -92,7 +97,7 @@
                           '<% if ( this.buttonsMessage ) { %>' +
                             '<div class="buttonMessage"><%= this.buttonsMessage %></div>' +
                           '<% } %>' +
-                          '<input name="SubmitButton" type="submit" value="Submit Request" class="dialog_submit"/>' +
+                          '<input type="submit" value="Submit Request" class="dialog_submit"/>' +
                           '<input type="reset" value="Cancel" class="dialog_cancel"/>' +
                         '</div>' +
                         '<% if ( this.footer ) { %>' +
@@ -164,7 +169,7 @@
           //event hooks
           createDialog: function(){},
           destroyDialog: function (){},
-          onSubmit: function(){},
+          onSubmit: function(){return true;},
 
           //id of form for form processing
           'form': 'EADRequest',
@@ -200,7 +205,7 @@
 
       //get data from form
       if ( settings.datasource === 'form' ) {
-        methods['processForm'].apply(this,null);
+        methods['_processForm'].apply(this,null);
       }
 
       //expand templates
@@ -279,14 +284,19 @@
       $(idSelector + ' .dialog_submit').on('click.aeonRequestsDialog' + idSelector,function(e){
         e.preventDefault();
         e.stopPropagation();
-        var settings = $this.data('aeonRequestDialog').settings;
-        if ( !settings.beforeOnSubmit() ) {
+        if ( $(idSelector+' input[name="Request"]:checked').length == 0 ) {
           return;
         }
+
         if ( !settings.onSubmit() ) {
           return;
         }
 
+        if ( settings.compressRequests ) {
+          methods['_compressRequests'].apply($this,null);
+        }
+
+        $(idSelector+ ' .aeon_request_form').submit();
       });
 
       $( idSelector + ' .dialog_cancel').on('click.aeonRequestsDialog' + idSelector, function(){
@@ -298,7 +308,7 @@
       $('#' + settings.dialogId + ' .datepicker').datepicker('destroy');
       $(window).off('.aeonRequestsDialog#'+settings.dialogId);
     },
-    'processForm': function (){
+    '_processForm': function (){
       var settings = this.data('aeonRequestsDialog').settings;
       settings.items = [];
       $(settings.checkedItemSelector).each(function(){
@@ -320,6 +330,54 @@
       }
 
       this.data('aeonRequestsDialog', { settings: settings });
+    },
+    _compressRequests: function(){
+      var settings = this.data('aeonRequestsDialog').settings;
+      var reqs = {};
+      var idSelector = '#'+settings.dialogId;
+      var field = settings.compressRequestsField;
+      var requests = $(idSelector+' input[name="Request"]:checked');
+      var newReqNum = requests.length+1;
+
+      requests.each( function(){
+        var val = $(this).val();
+        var req = $(idSelector + ' input[name="'+field + '_' + val +'"]').val();
+        if ( !reqs[req] ) {
+          reqs[req] = new Array();
+        }
+        reqs[req].push(val);
+
+        for (var req in reqs) {
+          var keys = reqs[req];
+          if ( keys.length < 2 ) {
+            continue;
+          }
+          var newRequest = {};
+          for ( var x=0;x < settings.itemFields.length;x++) {
+            var field = settings.itemFields[x].name;
+            for (var y=0;y < keys.length; y++) {
+              var key = keys[y];
+              var oldField = $(idSelector + ' input[name="'+field + '_' + key +'"]');
+              if (!oldField) {
+                continue;
+              }
+              var oldVal = oldField.val();
+              if (!newRequest[field]) {
+                newRequest[field] = oldVal;
+              } else if ( newRequest[field] != oldVal) {
+                newRequest[field] += "; " + oldVal;
+              }
+              oldField.remove();
+              $('input[name="Request"][value="' + key + '"]').remove();
+            }
+          }
+          $('<input/>').prop('type','hidden').prop('name','Request').val(newReqNum).appendTo(idSelector+ ' .aeon_request_form' );
+          for ( var field in newRequest ) {
+            $('<input/>').prop('type','hidden').prop('name',field + '_' + newReqNum).val(newRequest[field]).appendTo(idSelector+ ' .aeon_request_form' );
+          }
+          newReqNum++;
+        }
+      });
     },
     options: function(){
       var settings = this.data('aeonRequestsDialog').settings;
