@@ -292,6 +292,7 @@
           return;
         }
 
+
         if ( settings.compressRequests ) {
           methods['_compressRequests'].apply($this,null);
         }
@@ -333,51 +334,51 @@
     },
     _compressRequests: function(){
       var settings = this.data('aeonRequestsDialog').settings;
-      var reqs = {};
+      var codes = {};
       var idSelector = '#'+settings.dialogId;
-      var field = settings.compressRequestsField;
+      var fieldName = settings.compressRequestsField;
       var requests = $(idSelector+' input[name="Request"]:checked');
-      var newReqNum = requests.length+1;
+      var newReqNum = requests.length;
 
       requests.each( function(){
-        var val = $(this).val();
-        var req = $(idSelector + ' input[name="'+field + '_' + val +'"]').val();
-        if ( !reqs[req] ) {
-          reqs[req] = new Array();
+        var requestNumber = $(this).val();
+        var collapseFieldValue = $(idSelector + ' input[name="'+fieldName + '_' + requestNumber +'"]').val();
+        if ( !codes[collapseFieldValue] ) {
+          codes[collapseFieldValue] = new Array();
         }
-        reqs[req].push(val);
-
-        for (var req in reqs) {
-          var keys = reqs[req];
-          if ( keys.length < 2 ) {
-            continue;
-          }
-          var newRequest = {};
-          for ( var x=0;x < settings.itemFields.length;x++) {
-            var field = settings.itemFields[x].name;
-            for (var y=0;y < keys.length; y++) {
-              var key = keys[y];
-              var oldField = $(idSelector + ' input[name="'+field + '_' + key +'"]');
-              if (!oldField) {
-                continue;
-              }
-              var oldVal = oldField.val();
-              if (!newRequest[field]) {
-                newRequest[field] = oldVal;
-              } else if ( newRequest[field] != oldVal) {
-                newRequest[field] += "; " + oldVal;
-              }
-              oldField.remove();
-              $('input[name="Request"][value="' + key + '"]').remove();
-            }
-          }
-          $('<input/>').prop('type','hidden').prop('name','Request').val(newReqNum).appendTo(idSelector+ ' .aeon_request_form' );
-          for ( var field in newRequest ) {
-            $('<input/>').prop('type','hidden').prop('name',field + '_' + newReqNum).val(newRequest[field]).appendTo(idSelector+ ' .aeon_request_form' );
-          }
-          newReqNum++;
-        }
+        codes[collapseFieldValue].push(requestNumber);
       });
+
+      for (var code in codes) {
+        var requestNumbers = codes[code];
+        if ( requestNumbers.length < 2 ) {
+          continue;
+        }
+        var newRequest = {};
+        for ( var x=0;x < settings.itemFields.length;x++) {
+          var field = settings.itemFields[x].name;
+          for (var y=0;y < requestNumbers.length; y++) {
+            var key = requestNumbers[y];
+            var oldField = $(idSelector + ' input[name="'+field + '_' + key +'"]');
+            if (!oldField) {
+              continue;
+            }
+            var oldVal = oldField.val();
+            if (!newRequest[field]) {
+              newRequest[field] = oldVal;
+            } else if ( newRequest[field] != oldVal) {
+              newRequest[field] += "; " + oldVal;
+            }
+            oldField.remove();
+            $('input[name="Request"][value="' + key + '"]').prop('name','oldRequest');
+          }
+        }
+        $('<input/>').prop('type','hidden').prop('name','Request').val(newReqNum).appendTo(idSelector+ ' .aeon_request_form' );
+        for ( var field in newRequest ) {
+          $('<input/>').prop('type','hidden').prop('name',field + '_' + newReqNum).val(newRequest[field]).appendTo(idSelector+ ' .aeon_request_form' );
+        }
+        newReqNum++;
+      }
     },
     options: function(){
       var settings = this.data('aeonRequestsDialog').settings;
