@@ -231,7 +231,6 @@
         if ( settings.includeAdvancedCopyOptions ) {
           settings.RequestType = 'Copy';
         }
-
         $(settings.submitButtonSelector).on('click.aeonRequestsDialogMain', function (e) {
           e.preventDefault();
           e.stopPropagation();
@@ -254,7 +253,19 @@
       //get data from form
       if ( settings.datasource === 'form' ) {
         methods['_processForm'].apply(this,null);
+        methods['_showDialog'].apply(this,null);
       }
+
+      if ( settings.datasource === 'json' ) {
+        $.getJSON(settings.json_url, {'showJSON':1,'isAeon':1},function(data){
+          settings.json_callback(data);
+          methods['_showDialog'].apply($this,null);
+        });
+      }
+    },
+    _showDialog: function(){
+      var settings = this.data('aeonRequestsDialog').settings;
+      var $this = this;
 
       //expand templates
       var $dialog = $('#'+ settings.dialogId);
