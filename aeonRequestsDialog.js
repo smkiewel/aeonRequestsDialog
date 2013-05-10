@@ -270,7 +270,9 @@
       }
 
       if ( settings.datasource === 'custom') {
-        if ( settings.custom_callback() ){
+        var o = settings.custom_callback();
+        if ( o ){
+          methods.options.apply($this,[o]);
           methods._showDialog.apply($this,null);
         }
       }
