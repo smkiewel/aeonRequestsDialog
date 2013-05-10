@@ -32,17 +32,20 @@ to all items in a request, e.g. 'Site'.
     available.
 
     In the head of your document, add
+
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css" />
         <link rel="stylesheet" href="path/to/aeonRequestsDialog.css" />
 
     At the end of the body, add
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-      <script src="path/to/jquery.jqote2.min.js"></script>
-      <script src="path/to/aeonRequestsDialog.min.js"></script>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+        <script src="path/to/jquery.jqote2.min.js"></script>
+        <script src="path/to/aeonRequestsDialog.min.js"></script>
 
 4.  Configure settings and startup dialog. This will create the dialog and bind
     the show action to the button.
+
         var settings = { ... };
         $('#id_of_submit_button').aeonRequestsDialog(settings);
 
@@ -92,19 +95,19 @@ When configuring the dialog for use with forms, be sure and check the following:
   the itemFields setting. This setting takes an array of objects in the
   following form:
 
-      ...
-      itemFields: [
-        {
-          'name': 'FieldName1',
-          'label': 'FieldLabel1'
-        },
-        {
-          'name': 'FieldName2',
-          'label': 'FieldLabel2'
-        },
         ...
-      ],
-      ...
+        itemFields: [
+          {
+            'name': 'FieldName1',
+            'label': 'FieldLabel1'
+          },
+          {
+            'name': 'FieldName2',
+            'label': 'FieldLabel2'
+          },
+          ...
+        ],
+        ...
 
   'name' refers to name attribute of the hidden form element minus the unique
   identifier, e.g. 'ItemTitle' would refer to the input with a name like
@@ -119,17 +122,17 @@ When configuring the dialog for use with forms, be sure and check the following:
   fields at the top of the form, but you can also supply default values when you
   define the fields, like so:
 
-    ...
-    globalFields: [
-      {
-        'name': 'GlobalField1'
-      },
-      {
-        'name': 'GlobalField2',
-        'value': 'defaultValue'
-      }
-    ],
-    ...
+        ...
+        globalFields: [
+          {
+            'name': 'GlobalField1'
+          },
+          {
+            'name': 'GlobalField2',
+            'value': 'defaultValue'
+          }
+        ],
+        ...
 
 * The submit button in the form should be the button used when initializing the
   plugin.
@@ -159,32 +162,32 @@ be sure and check the following:
   the json call into the expected data format and return that object. The
   returned object must conform to the following format:
 
-    {
-      globalFields: [
         {
-          'name': 'GlobalField1',
-          'value': 'GlobalValue1'
-        },
-        {
-          'name': 'GlobalField2',
-          'value': 'GlobalValue2'
-        },
-        ...
-      ],
-      items : [
-        {
-          'name': 'FieldName1',
-          'label': 'FieldLabel1',
-          'value': 'FieldValue1',
-        },
-        {
-          'name': 'FieldName2',
-          'label': 'FieldLabel2',
-          'value': 'FieldValue2',
-        },
-        ...
-      ]
-    }
+          globalFields: [
+            {
+              'name': 'GlobalField1',
+              'value': 'GlobalValue1'
+            },
+            {
+              'name': 'GlobalField2',
+              'value': 'GlobalValue2'
+            },
+            ...
+          ],
+          items : [
+            {
+              'name': 'FieldName1',
+              'label': 'FieldLabel1',
+              'value': 'FieldValue1',
+            },
+            {
+              'name': 'FieldName2',
+              'label': 'FieldLabel2',
+              'value': 'FieldValue2',
+            },
+            ...
+          ]
+        }
 
   As with form processing, if 'label' is omitted, the field will not be
   displayed but will be included in form submission.
@@ -195,10 +198,10 @@ be sure and check the following:
 * 'json_content' holds any additional query args needed to be passed to
   'json_url' and is a key-value object, e.g.:
 
-    {
-      'isAeon': 1,
-      'showJSON': 1
-    }
+        {
+          'isAeon': 1,
+          'showJSON': 1
+        }
 
 ### Custom
 
@@ -218,32 +221,32 @@ If you need custom processing, be sure and set the following:
 * 'custom_callback' - function that fetches, builds, or otherwise readies the
   data for use by the dialog. Must return an object in the following format:
 
-    {
-      globalFields: [
         {
-          'name': 'GlobalField1',
-          'value': 'GlobalValue1'
-        },
-        {
-          'name': 'GlobalField2',
-          'value': 'GlobalValue2'
-        },
-        ...
-      ],
-      items : [
-        {
-          'name': 'FieldName1',
-          'label': 'FieldLabel1',
-          'value': 'FieldValue1',
-        },
-        {
-          'name': 'FieldName2',
-          'label': 'FieldLabel2',
-          'value': 'FieldValue2',
-        },
-        ...
-      ]
-    }
+          globalFields: [
+            {
+              'name': 'GlobalField1',
+              'value': 'GlobalValue1'
+            },
+            {
+              'name': 'GlobalField2',
+              'value': 'GlobalValue2'
+            },
+            ...
+          ],
+          items : [
+            {
+              'name': 'FieldName1',
+              'label': 'FieldLabel1',
+              'value': 'FieldValue1',
+            },
+            {
+              'name': 'FieldName2',
+              'label': 'FieldLabel2',
+              'value': 'FieldValue2',
+            },
+            ...
+          ]
+        }
 
   As with form processing, if 'label' is omitted, the field will not be
   displayed but will be included in form submission.
@@ -307,27 +310,27 @@ This plugin has some extra behaviors and UI elements available for use.
   new instance of that field, separated by '; '. For example, consider
   a request for the following items:
 
-    ItemNumber: 1
-    ItemTitle: Title1
-    ItemSubTitle: SubTitle
+        ItemNumber: 1
+        ItemTitle: Title1
+        ItemSubTitle: SubTitle
 
-    ItemNumber: 1
-    ItemTitle: Title1-2
-    ItemSubTitle: SubTitle
+        ItemNumber: 1
+        ItemTitle: Title1-2
+        ItemSubTitle: SubTitle
 
-    ItemNumber: 2
-    ItemTitle: Title2
-    ItemSubTitle: SubTitle2
+        ItemNumber: 2
+        ItemTitle: Title2
+        ItemSubTitle: SubTitle2
 
   These would produce the following requests in Aeon:
 
-    ItemNumber: 1
-    ItemTitle: Title1; Title1-2
-    ItemSubTitle: SubTitle
+        ItemNumber: 1
+        ItemTitle: Title1; Title1-2
+        ItemSubTitle: SubTitle
 
-    ItemNumber: 2
-    ItemTitle: Title2
-    ItemSubTitle: SubTitle2
+        ItemNumber: 2
+        ItemTitle: Title2
+        ItemSubTitle: SubTitle2
 
 ## Customization
 
@@ -565,128 +568,128 @@ All methods are called using the default jQuery style. E.g.:
 
 * 'template': jqote template for dialog
   default:
-      '<form method="POST" action="<%= this.url %>" class="aeon_request_form" target="_self" name="<%= this.AeonForm %>">' +
-        '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
-        '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" />' +
-        '<input name="SubmitButton" value="Submit Request" type="hidden" />' +
-        '<% for (var x=0; x < this.globalFields.length; x++ ) { %>' +
-          '<input name="<%= this.globalFields[x].name %>" type="hidden" value="<%= this.globalFields[x].value %>" />' +
-        '<% } %>' +
-        '<% if ( this.header ) { %>' +
-          '<div class="aeon_request_header"><%= this.header %></div>' +
-        '<% } %>' +
-        '<div class="aeon_request_items"></div>' +
-        '<% if ( this.includeSimpleCopyOption ) { %>' +
-          '<div class="simple_copy_opt">' +
-            '<div class="request_inputs">' +
-              '<input type="checkbox" class="copy_check" value="Yes"/>' +
-            '</div>' +
-            '<div class="requestDesc"><label for="aeon_request_copy"><span class="label"><%= this.simpleCopyLabel %></span></label></div>' +
-            '<% if ( this.simpleCopyMessage ) { %>' +
-              '<div class="requestDesc"><%= this.simpleCopyMessage %></div>' +
-            '<% } %>' +
-          '</div>' +
-        '<% } %>' +
-        '<% if ( this.includeAdvancedCopyOptions ) { %>' +
-          '<div class="advanced_copy_opt">' +
-            '<div class="adv_copy_message"><%= this.advancedCopyMessage %></div>' +
-            '<div class="adv_copy_element">' +
-              '<label for="Format" class="label"><%= this.formatLabel %></label>' +
-              '<select name="Format" class="adv_copy_select">' +
-                '<% for ( var x=0; x < this.formatOptions.length; x++ ) { %>' +
-                  '<% var o = this.formatOptions[x]; %>' +
-                  '<% if ( typeof o === "object" ) { %>' +
-                    '<option value="<%= o.value %>"><%= o.label %></option>'+
-                  '<% } else { %>' +
-                    '<option><%= o %></option>'+
-                  '<% } %>' +
-                '<% } %>' +
-              '</select>' +
-            '</div>' +
-            '<div class="adv_copy_element">' +
-              '<label for="ServiceLevel" class="label"><%= this.serviceLevelLabel %></label>' +
-              '<select name="ServiceLevel" class="adv_copy_select">' +
-                '<% for ( var x=0; x < this.serviceLevelOptions.length; x++ ) { %>' +
-                  '<% var o = this.serviceLevelOptions[x]; %>' +
-                  '<% if ( typeof o === "object" ) { %>' +
-                    '<option value="<%= o.value %>"><%= o.label %></option>'+
-                  '<% } else { %>' +
-                    '<option><%= o %></option>'+
-                  '<% } %>' +
-                '<% } %>' +
-              '</select>' +
-            '</div>' +
-            '<div class="adv_copy_element">' +
-              '<label for="ShippingOption" class="label"><%= this.shippingOptionLabel %></label>' +
-              '<select name="ShippingOption" class="adv_copy_select">' +
-                '<% for ( var x=0; x < this.shippingOptions.length; x++ ) { %>' +
-                  '<% var o = this.shippingOptions[x]; %>' +
-                  '<% if ( typeof o === "object" ) { %>' +
-                    '<option value="<%= o.value %>"><%= o.label %></option>'+
-                  '<% } else { %>' +
-                    '<option><%= o %></option>'+
-                  '<% } %>' +
-                '<% } %>' +
-              '</select>' +
-            '</div>' +
-            '<div class="adv_copy_element">' +
-              '<label for="ForPublication" class="label"><%= this.forPublicationLabel %></label>' +
-              '<input name="ForPublication" type="checkbox" value="Yes">' +
-            '</div>' +
-          '</div>' +
-        '<% } %>' +
-        '<% if ( this.includeNotes ) { %>' +
-          '<div class="notes">' +
-            '<% if ( this.notesMessage ) { %>' +
-              '<label for="Notes"><span class="label"><%= this.notesMessage %></span></label><br/>' +
-            '<% } %>' +
-            '<textarea name="Notes" cols="60" rows="4"></textarea>' +
-          '</div>' +
-        '<% } %>' +
-        '<% if (this.includeScheduledDate) { %>' +
-          '<div class="rev_sched_opt">' +
-            '<input type="radio" name="UserReview" id="scheduled_date_radio" class="schedule_opt" value="No" checked="checked"/>' +
-          '</div>' +
-          '<div class="scheduled_date">' +
-            '<label for="scheduled_date_radio"><span class="label"><%= this.scheduledDateLabel %></span></label><br/>' +
-            '<input type="text" class="datepicker"  name="ScheduledDate"/>' +
-          '</div>' +
-          '<div class="rev_sched_opt">' +
-            '<input type="radio" name="UserReview" id="user_review_radio" value="Yes" class="schedule_opt"/>' +
-          '</div>' +
-          '<div class="review disabled">' +
-            '<label for="user_review_radio"><%= this.userReviewLabel %></label>' +
-          '</div>' +
-        '<% } %>' +
-        '<div class="buttons">' +
-          '<% if ( this.buttonsMessage ) { %>' +
-            '<div class="buttonMessage"><%= this.buttonsMessage %></div>' +
+        '<form method="POST" action="<%= this.url %>" class="aeon_request_form" target="_self" name="<%= this.AeonForm %>">' +
+          '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
+          '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" />' +
+          '<input name="SubmitButton" value="Submit Request" type="hidden" />' +
+          '<% for (var x=0; x < this.globalFields.length; x++ ) { %>' +
+            '<input name="<%= this.globalFields[x].name %>" type="hidden" value="<%= this.globalFields[x].value %>" />' +
           '<% } %>' +
-          '<input type="submit" value="Submit Request" class="dialog_submit"/>' +
-          '<input type="reset" value="Cancel" class="dialog_cancel"/>' +
-        '</div>' +
-        '<% if ( this.footer ) { %>' +
-          '<div class="aeon_footer"><%= this.footer %></div>' +
-        '<% } %>' +
-      '</form>'
+          '<% if ( this.header ) { %>' +
+            '<div class="aeon_request_header"><%= this.header %></div>' +
+          '<% } %>' +
+          '<div class="aeon_request_items"></div>' +
+          '<% if ( this.includeSimpleCopyOption ) { %>' +
+            '<div class="simple_copy_opt">' +
+              '<div class="request_inputs">' +
+                '<input type="checkbox" class="copy_check" value="Yes"/>' +
+              '</div>' +
+              '<div class="requestDesc"><label for="aeon_request_copy"><span class="label"><%= this.simpleCopyLabel %></span></label></div>' +
+              '<% if ( this.simpleCopyMessage ) { %>' +
+                '<div class="requestDesc"><%= this.simpleCopyMessage %></div>' +
+              '<% } %>' +
+            '</div>' +
+          '<% } %>' +
+          '<% if ( this.includeAdvancedCopyOptions ) { %>' +
+            '<div class="advanced_copy_opt">' +
+              '<div class="adv_copy_message"><%= this.advancedCopyMessage %></div>' +
+              '<div class="adv_copy_element">' +
+                '<label for="Format" class="label"><%= this.formatLabel %></label>' +
+                '<select name="Format" class="adv_copy_select">' +
+                  '<% for ( var x=0; x < this.formatOptions.length; x++ ) { %>' +
+                    '<% var o = this.formatOptions[x]; %>' +
+                    '<% if ( typeof o === "object" ) { %>' +
+                      '<option value="<%= o.value %>"><%= o.label %></option>'+
+                    '<% } else { %>' +
+                      '<option><%= o %></option>'+
+                    '<% } %>' +
+                  '<% } %>' +
+                '</select>' +
+              '</div>' +
+              '<div class="adv_copy_element">' +
+                '<label for="ServiceLevel" class="label"><%= this.serviceLevelLabel %></label>' +
+                '<select name="ServiceLevel" class="adv_copy_select">' +
+                  '<% for ( var x=0; x < this.serviceLevelOptions.length; x++ ) { %>' +
+                    '<% var o = this.serviceLevelOptions[x]; %>' +
+                    '<% if ( typeof o === "object" ) { %>' +
+                      '<option value="<%= o.value %>"><%= o.label %></option>'+
+                    '<% } else { %>' +
+                      '<option><%= o %></option>'+
+                    '<% } %>' +
+                  '<% } %>' +
+                '</select>' +
+              '</div>' +
+              '<div class="adv_copy_element">' +
+                '<label for="ShippingOption" class="label"><%= this.shippingOptionLabel %></label>' +
+                '<select name="ShippingOption" class="adv_copy_select">' +
+                  '<% for ( var x=0; x < this.shippingOptions.length; x++ ) { %>' +
+                    '<% var o = this.shippingOptions[x]; %>' +
+                    '<% if ( typeof o === "object" ) { %>' +
+                      '<option value="<%= o.value %>"><%= o.label %></option>'+
+                    '<% } else { %>' +
+                      '<option><%= o %></option>'+
+                    '<% } %>' +
+                  '<% } %>' +
+                '</select>' +
+              '</div>' +
+              '<div class="adv_copy_element">' +
+                '<label for="ForPublication" class="label"><%= this.forPublicationLabel %></label>' +
+                '<input name="ForPublication" type="checkbox" value="Yes">' +
+              '</div>' +
+            '</div>' +
+          '<% } %>' +
+          '<% if ( this.includeNotes ) { %>' +
+            '<div class="notes">' +
+              '<% if ( this.notesMessage ) { %>' +
+                '<label for="Notes"><span class="label"><%= this.notesMessage %></span></label><br/>' +
+              '<% } %>' +
+              '<textarea name="Notes" cols="60" rows="4"></textarea>' +
+            '</div>' +
+          '<% } %>' +
+          '<% if (this.includeScheduledDate) { %>' +
+            '<div class="rev_sched_opt">' +
+              '<input type="radio" name="UserReview" id="scheduled_date_radio" class="schedule_opt" value="No" checked="checked"/>' +
+            '</div>' +
+            '<div class="scheduled_date">' +
+              '<label for="scheduled_date_radio"><span class="label"><%= this.scheduledDateLabel %></span></label><br/>' +
+              '<input type="text" class="datepicker"  name="ScheduledDate"/>' +
+            '</div>' +
+            '<div class="rev_sched_opt">' +
+              '<input type="radio" name="UserReview" id="user_review_radio" value="Yes" class="schedule_opt"/>' +
+            '</div>' +
+            '<div class="review disabled">' +
+              '<label for="user_review_radio"><%= this.userReviewLabel %></label>' +
+            '</div>' +
+          '<% } %>' +
+          '<div class="buttons">' +
+            '<% if ( this.buttonsMessage ) { %>' +
+              '<div class="buttonMessage"><%= this.buttonsMessage %></div>' +
+            '<% } %>' +
+            '<input type="submit" value="Submit Request" class="dialog_submit"/>' +
+            '<input type="reset" value="Cancel" class="dialog_cancel"/>' +
+          '</div>' +
+          '<% if ( this.footer ) { %>' +
+            '<div class="aeon_footer"><%= this.footer %></div>' +
+          '<% } %>' +
+        '</form>'
 
 * 'items_template': jqote template for items
   default:
-      '<div>' +
-        '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
-          '<div class="requestItem" style="clear:both">' +
-            '<div class="request_inputs">' +
-              '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + "\n" +
+        '<div>' +
+          '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
+            '<div class="requestItem" style="clear:both">' +
+              '<div class="request_inputs">' +
+                '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + "\n" +
+                '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
+                  '<input type="hidden" name="<%= this.items[x].fields[y].name %>_<%= x %>" value="<%= this.items[x].fields[y].value %>">' +
+                '<% } %>' +
+              '</div>' + "\n" +
               '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
-                '<input type="hidden" name="<%= this.items[x].fields[y].name %>_<%= x %>" value="<%= this.items[x].fields[y].value %>">' +
+                '<% if ( this.items[x].fields[y].label ) { %>' +
+                  '<div class="requestDesc"><span class="label"><%= this.items[x].fields[y].label %>:</span> <%= this.items[x].fields[y].value %></div>' +
+                '<% } %>' +
               '<% } %>' +
             '</div>' + "\n" +
-            '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
-              '<% if ( this.items[x].fields[y].label ) { %>' +
-                '<div class="requestDesc"><span class="label"><%= this.items[x].fields[y].label %>:</span> <%= this.items[x].fields[y].value %></div>' +
-              '<% } %>' +
-            '<% } %>' +
-          '</div>' + "\n" +
-        '<% } %>' + "\n" +
-      '</div>'
+          '<% } %>' + "\n" +
+        '</div>'
 
