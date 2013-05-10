@@ -284,7 +284,6 @@ This plugin has some extra behaviors and UI elements available for use.
   Each select has a default set of options that can be overriden in two ways:
   1.  Array of strings. Each string will be set as the value and label of the
       option, like so: <option>string</option>
-
   2.  Array of objects, each object containing a 'label' and a 'value' field.
       The label field will be the displayed value and the 'value' field will
       be set as the 'value' attribute: <option value="value">label</option>
@@ -604,6 +603,7 @@ All methods are called using the default jQuery style. E.g.:
 * 'cleanValues': function used during form processing to clean values from form
 
   default:
+
         function(s){
           return s.replace(/(^\s*)|(\s*$)/g, "").replace(/(\n|\t)/g, '');
         }
@@ -611,6 +611,7 @@ All methods are called using the default jQuery style. E.g.:
 * 'template': jqote template for dialog
 
   default:
+
         '<form method="POST" action="<%= this.url %>" class="aeon_request_form" target="_self" name="<%= this.AeonForm %>">' +
           '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
           '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" />' +
@@ -719,6 +720,7 @@ All methods are called using the default jQuery style. E.g.:
 * 'items_template': jqote template for items
 
   default:
+  
         '<div>' +
           '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
             '<div class="requestItem" style="clear:both">' +
