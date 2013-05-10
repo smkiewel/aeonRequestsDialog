@@ -48,6 +48,9 @@
           //callback for json response
           'json_callback': null,
 
+          //args to be passed as the content of the json request
+          'json_content':null,
+
           'custom_callback': null,
 
           //jqote template for dialog
@@ -256,8 +259,12 @@
       }
 
       if ( settings.datasource === 'json' ) {
-        $.getJSON(settings.json_url, {'showJSON':1,'isAeon':1},function(data){
-          settings.json_callback(data);
+        $.getJSON(settings.json_url, settings.json_content,function(data){
+          var o = settings.json_callback(data);
+          if ( o ){
+            methods.options.apply($this,[o]);
+          }
+
           methods._showDialog.apply($this,null);
         });
       }
