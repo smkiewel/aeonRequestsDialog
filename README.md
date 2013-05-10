@@ -270,8 +270,8 @@ This plugin has some extra behaviors and UI elements available for use.
   'userReviewMessage'. To disable, set 'includeScheduledDate' to false.
 
 * Simple copy options: adds a checkbox and a message to the dialog that allows
-  for toggling the default RequestType between 'Loan' and 'Copy'. To enable,
-  set 'includeSimpleCopyOptions' to true. To customize the checkbox label, set
+  for toggling the RequestType between 'Loan' and 'Copy'. To enable, set
+  'includeSimpleCopyOptions' to true. To customize the checkbox label, set
   'simpleCopyLabel'. To add an explanatory or other message above the checkbox,
   set 'simpleCopyMessage'.
 
@@ -283,10 +283,12 @@ This plugin has some extra behaviors and UI elements available for use.
 
   Each select has a default set of options that can be overriden in two ways:
   1.  Array of strings. Each string will be set as the value and label of the
-      option, like so: <option>string</option>
+      option, like so:
+        <option>string</option>
   2.  Array of objects, each object containing a 'label' and a 'value' field.
       The label field will be the displayed value and the 'value' field will
-      be set as the 'value' attribute: <option value="value">label</option>
+      be set as the 'value' attribute:
+        <option value="value">label</option>
 
   Additionally, each of these has a default label to be displayed to the left
   of the select that is overrideable by setting, e.g., 'formatLabel'.
@@ -720,7 +722,7 @@ All methods are called using the default jQuery style. E.g.:
 * 'items_template': jqote template for items
 
   default:
-  
+
         '<div>' +
           '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
             '<div class="requestItem" style="clear:both">' +
