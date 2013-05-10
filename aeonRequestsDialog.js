@@ -1,11 +1,12 @@
 (function( $ ){
+  "use strict";
   var methods = {
     init : function( options ) {
-      var $this = this, data = this.data('aeonRequestsDialog');
+      var $this = this, data = this.data('aeonRequestsDialog'), settings;
 
       // If the plugin hasn't been initialized yet
       if ( ! data ) {
-        var settings = $.extend( {
+        settings = $.extend( {
           //dialog id
           'dialogId': 'aeon_request_dialog',
 
@@ -46,6 +47,8 @@
 
           //callback for json response
           'json_callback': null,
+
+          'custom_callback': null,
 
           //jqote template for dialog
           'template':'<form method="POST" action="<%= this.url %>" class="aeon_request_form" target="_self" name="<%= this.AeonForm %>">' +
@@ -205,15 +208,12 @@
           //selector of button used to show dialog
           'submitButtonSelector': '.aeon_submit',
 
-          //checkbox selector
-          'checkboxSelector': '.aeon_check',
-
           'minWidth': 750,
 
           //event hooks
-          createDialog: function(){},
-          destroyDialog: function (){},
-          onSubmit: function(){return true;},
+          'createDialog': function(){return this;},
+          'destroyDialog': function (){return this;},
+          'onSubmit': function(){return true;},
 
           //id of form for form processing
           'form': 'EADRequest',
@@ -234,7 +234,7 @@
         $(settings.submitButtonSelector).on('click.aeonRequestsDialogMain', function (e) {
           e.preventDefault();
           e.stopPropagation();
-          methods['show'].apply($this, null);
+          methods.show.apply($this, null);
         });
 
         $(this).data('aeonRequestsDialog', {
@@ -247,48 +247,51 @@
       return this;
     },
     show : function() {
-      var settings = this.data('aeonRequestsDialog').settings;
-      var $this = this;
+      var settings = this.data('aeonRequestsDialog').settings, $this = this;
 
       //get data from form
       if ( settings.datasource === 'form' ) {
-        methods['_processForm'].apply(this,null);
-        methods['_showDialog'].apply(this,null);
+        methods._processForm.apply(this,null);
+        methods._showDialog.apply(this,null);
       }
 
       if ( settings.datasource === 'json' ) {
         $.getJSON(settings.json_url, {'showJSON':1,'isAeon':1},function(data){
           settings.json_callback(data);
-          methods['_showDialog'].apply($this,null);
+          methods._showDialog.apply($this,null);
         });
+      }
+
+      if ( settings.datasource === 'custom') {
+        if ( settings.custom_callback() ){
+          methods._showDialog.apply($this,null);
+        }
       }
     },
     _showDialog: function(){
-      var settings = this.data('aeonRequestsDialog').settings;
-      var $this = this;
+      var settings = this.data('aeonRequestsDialog').settings,
+        $this = this,
+        $dialog = $('#'+ settings.dialogId),
+        opts = {
+          modal:true,
+          autoOpen:false,
+          close: function(){
+            if ( settings.useDefaultBindings ) {
+              methods._defaultDestroyDialog.apply($this,null);
+            }
+            settings.destroyDialog();
+            $(window).off('.aeonRequestsDialog');
+            $dialog.dialog('destroy');
+            $dialog.html('');
+          }
+        },
+        f = [ 'height','width'],
+        f2 = [ 'min', 'max' ];
 
-      //expand templates
-      var $dialog = $('#'+ settings.dialogId);
       $dialog.jqotesub(settings.template, settings);
       $('#' + settings.dialogId + " " + settings.items_attachpoint_selector).jqotesub(settings.items_template,settings);
 
       //setup dialog
-      var opts = {
-        modal:true,
-        autoOpen:false,
-        close: function(){
-          if ( settings.useDefaultBindings ) {
-            methods['_defaultDestroyDialog'].apply($this,null);
-          }
-          settings.destroyDialog();
-          $(window).off('.aeonRequestsDialog');
-          $dialog.dialog('destroy');
-          $dialog.html('');
-        }
-      }
-
-      var f = [ 'height','width'];
-      var f2 = [ 'min', 'max' ];
       for (var x=0;x < 2; x++) {
         if (settings[f[x]]) {
           opts[f[x]] = settings[f[x]];
@@ -303,7 +306,7 @@
       }
       $dialog.dialog(opts);
       if ( settings.useDefaultBindings ) {
-        methods['_defaultCreateDialog'].apply(this,null);
+        methods._defaultCreateDialog.apply(this,null);
       }
       settings.createDialog();
       $dialog.dialog('open');
@@ -353,7 +356,7 @@
 
 
         if ( settings.compressRequests ) {
-          methods['_compressRequests'].apply($this,null);
+          methods._compressRequests.apply($this,null);
         }
 
         $(idSelector+ ' .aeon_request_form').submit();
