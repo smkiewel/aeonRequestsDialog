@@ -83,7 +83,12 @@
                               '<label for="Format" class="label"><%= this.formatLabel %></label>' +
                               '<select name="Format" class="adv_copy_select">' +
                                 '<% for ( var x=0; x < this.formatOptions.length; x++ ) { %>' +
-                                  '<option><%= this.formatOptions[x] %></option>'+
+                                  '<% var o = this.formatOptions[x]; %>' +
+                                  '<% if ( typeof o === "object" ) { %>' +
+                                    '<option value="<%= o.value %>"><%= o.label %></option>'+
+                                  '<% } else { %>' +
+                                    '<option><%= o %></option>'+
+                                  '<% } %>' +
                                 '<% } %>' +
                               '</select>' +
                             '</div>' +
@@ -91,7 +96,12 @@
                               '<label for="ServiceLevel" class="label"><%= this.serviceLevelLabel %></label>' +
                               '<select name="ServiceLevel" class="adv_copy_select">' +
                                 '<% for ( var x=0; x < this.serviceLevelOptions.length; x++ ) { %>' +
-                                  '<option><%= this.serviceLevelOptions[x] %></option>'+
+                                  '<% var o = this.serviceLevelOptions[x]; %>' +
+                                  '<% if ( typeof o === "object" ) { %>' +
+                                    '<option value="<%= o.value %>"><%= o.label %></option>'+
+                                  '<% } else { %>' +
+                                    '<option><%= o %></option>'+
+                                  '<% } %>' +
                                 '<% } %>' +
                               '</select>' +
                             '</div>' +
@@ -99,7 +109,12 @@
                               '<label for="ShippingOption" class="label"><%= this.shippingOptionLabel %></label>' +
                               '<select name="ShippingOption" class="adv_copy_select">' +
                                 '<% for ( var x=0; x < this.shippingOptions.length; x++ ) { %>' +
-                                  '<option><%= this.shippingOptions[x] %></option>'+
+                                  '<% var o = this.shippingOptions[x]; %>' +
+                                  '<% if ( typeof o === "object" ) { %>' +
+                                    '<option value="<%= o.value %>"><%= o.label %></option>'+
+                                  '<% } else { %>' +
+                                    '<option><%= o %></option>'+
+                                  '<% } %>' +
                                 '<% } %>' +
                               '</select>' +
                             '</div>' +
@@ -263,9 +278,8 @@
           var o = settings.json_callback(data);
           if ( o ){
             methods.options.apply($this,[o]);
+            methods._showDialog.apply($this,null);
           }
-
-          methods._showDialog.apply($this,null);
         });
       }
 
@@ -484,7 +498,7 @@
       }
 
       this.data('aeonRequestsDialog', {settings:settings});
-      return this;
+      return settings;
     },
     destroy : function() {
       var data = this.data('aeonRequestsDialog');
