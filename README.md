@@ -282,7 +282,6 @@ This plugin has some extra behaviors and UI elements available for use.
   enable, set 'includeAdvancedCopyOptions' to true.
 
   Each select has a default set of options that can be overriden in two ways:
-
   1.  Array of strings. Each string will be set as the value and label of the
       option, like so: <option>string</option>
 
@@ -345,7 +344,7 @@ Width will take precedence over min or max, and the same goes for height.
 
 More advanced customization can be had by providing new templates the items
 display or the whole dialog itself. These new templates must be jqote2
-templates, so view those (docs)[http://aefxx.com/jquery-plugins/jqote2/] to see
+templates, so view those [docs](http://aefxx.com/jquery-plugins/jqote2/) to see
 the templating syntax.
 
 If you wish to override the templates, I highly recommend you use the embedding
@@ -414,125 +413,162 @@ All methods are called using the default jQuery style. E.g.:
 
 * 'dialogId': id of the main dialog div. If putting more than one dialog on a
   page, be sure and set this to something other than default on second dialog.
+
   default: 'aeon_request_dialog'
 
 * 'submitButtonSelector': selector of button used to show dialog
+
   default: '.aeon_submit',
 
 * 'useDefaultBindings': setup default bindings. Set to false if completely
   replacing template.
+
   default: true
 
 * 'compressRequests': set to true to compress requests on a given field
+
   default: false
 
 * 'compressRequestsField': field to compress on
+
   default: 'ItemNumber'
 
 * 'url': url to Aeon DLL
 
 * 'AeonForm': argument passed to Aeon DLL for processing on their side
+
   default: 'EADRequest'
 
 * 'RequestType': whether copy or loan.
+
   default: 'Loan'
 
-* 'datasource': sets source of data for dialog
-  three possible values:
-    1) form: use default form processing
-    2) json: use default json processsing
-    3) custom: provide custom data processing
+* 'datasource': sets source of data for dialog. Values:
+  1. form: use default form processing
+  2. json: use default json processsing
+  3. custom: provide custom data processing
+
   default: form
 
 * 'globalFields': fields common to all requests
+
   default: []
 
 * 'itemFields': fields for individual items
+
   default: []
 
 * 'items': items to be requested
+
   default: []
 
 * 'json_url': url to json
+
   default: null
 
 * 'json_callback': callback for json response to process into correct format
+
   default: null
 
 * 'json_content': args to be passed as the content of the json request
+
   default: null
 
 * 'custom_callback': function used in custom processing to provide the data
+
   default: null
 
 * 'items_attachpoint_selector': selector for attachpoint of items
+
   default: '.aeon_request_items'
 
 * 'title': dialog title
+
   default: 'Confirm your request'
 
 * 'header': header message
+
   default: ''
 
 * 'includeNotes': include the notes field
+
   default: true
 
 * 'notesMessage': message to be displayed about notes textarea
+
   default: 'Please include any notes that might help us identify the specific items requested or any other pertinent information:'
 
 * 'includeScheduledDate': include the scheduled date ui elements
+
   default: true
 
 * 'scheduledDateLabel': label for the scheduled date option
+
   default: 'Scheduled Date'
 
 
 * 'userReviewLabel': label for the user review option
+
   default: 'Keep this request saved in your account for later review. It will not be sent to Libraries staff for fulfilment.'
 
 * 'buttonsMessage': message to be displayed above the submit and cancel buttons
+
   default: ''
 
 * 'footer': footer message
+
   default: '<i>* Requested items will be grouped by container in the Aeon system.</i>'
 
 * 'includeSimpleCopyOption': include the simple copy options
+
   default: false
 
 * 'simpleCopyLabel': label for simple copy checkbox
+
   default: 'Requesting Duplication of Material'
 
 * 'simpleCopyMessage': message to be displayed above copy check
+
   default: ''
 
 * 'includeAdvancedCopyOptions': include the advanced copy options
+
   default: false
 
 * 'advancedCopyMessage': message to be displayed above copy options
+
   default: ''
 
 * 'formatLabel': label for Format select
+
   default: 'Format'
 
 * 'formatOptions': options for Format select
+
   default: [ 'Photocopy', 'Scan (DVD/CD)', 'Scan (Electronic Delivery)' ]
 
 * 'serviceLevelLabel': label for ServiceLevel select
+
   default: 'Intended Use'
 
 * 'serviceLevelOptions': options for ServiceLevel select
+
   default: ['Advertisement (Commercial)', 'Advertisement (PSA)', 'Educational Use', 'Government', 'Live Presentation', 'Museum Use', 'Non Profit', 'Personal Use', 'Preservation Use']
 
 * 'shippingOptionLabel': label for ShippingOption select
+
   default: 'Shipping Option'
 
 * 'shippingOptions': options for ShippingOption select
+
   default: ['Download/FTP (User Provided)', 'Download/FTP (Institution Provided)', 'Pick up Onsite', 'Fed Ex (User Account)', 'UPS (User Account)', 'USPS (First Class)', 'USPS (Overseas)' ]
 
 * 'forPublicationLabel': label for ForPublication checkbox
+
   default: 'For Publication'
 
 * 'minWidth': minimum width of dialog
+
   default: 750
 
 * 'width': width of dialog
@@ -546,27 +582,34 @@ All methods are called using the default jQuery style. E.g.:
 * 'maxHeight': max height of dialog
 
 * 'createDialog': event hook for dialog creation
+
   default: function(){return this;}
 
 * 'destroyDialog': event hook for dialog destruction
+
   default: function (){return this;}
 
 * 'onSubmit': event hook for form submission
+
   default: function(){return true;},
 
 * 'form': id of form for form processing
+
   default: 'EADRequest'
 
 * 'checkedItemSelector': selector for checked items
+
   default: 'input[name="Request"]:checked',
 
 * 'cleanValues': function used during form processing to clean values from form
+
   default:
-      function(s){
-        return s.replace(/(^\s*)|(\s*$)/g, "").replace(/(\n|\t)/g, '');
-      }
+        function(s){
+          return s.replace(/(^\s*)|(\s*$)/g, "").replace(/(\n|\t)/g, '');
+        }
 
 * 'template': jqote template for dialog
+
   default:
         '<form method="POST" action="<%= this.url %>" class="aeon_request_form" target="_self" name="<%= this.AeonForm %>">' +
           '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
@@ -674,6 +717,7 @@ All methods are called using the default jQuery style. E.g.:
         '</form>'
 
 * 'items_template': jqote template for items
+
   default:
         '<div>' +
           '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
