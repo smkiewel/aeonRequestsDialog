@@ -283,12 +283,12 @@ This plugin has some extra behaviors and UI elements available for use.
 
   Each select has a default set of options that can be overriden in two ways:
 
-    1.  Array of strings. Each string will be set as the value and label of the
-        option, like so: <option>string</option>
+  1.  Array of strings. Each string will be set as the value and label of the
+      option, like so: <option>string</option>
 
-    2.  Array of objects, each object containing a 'label' and a 'value' field.
-        The label field will be the displayed value and the 'value' field will
-        be set as the 'value' attribute: <option value="value">label</option>
+  2.  Array of objects, each object containing a 'label' and a 'value' field.
+      The label field will be the displayed value and the 'value' field will
+      be set as the 'value' attribute: <option value="value">label</option>
 
   Additionally, each of these has a default label to be displayed to the left
   of the select that is overrideable by setting, e.g., 'formatLabel'.
