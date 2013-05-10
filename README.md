@@ -387,7 +387,7 @@ destroyDialog, and onSubmit.
 If the default behavior of the UI elements is undesireable, you can prevent its
 implementation by setting 'useDefaultBindings' to false. Beware: setting this to
 false will prevent ALL default UI bindings, so you will have to provide your own
-outside the plugin. This is primarily intended for those users who are
+in the createDialog method. This is primarily intended for those users who are
 completely replacing the default template.
 
 ## API
