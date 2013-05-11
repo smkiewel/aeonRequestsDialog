@@ -176,14 +176,34 @@ be sure and check the following:
           ],
           items : [
             {
-              'name': 'FieldName1',
-              'label': 'FieldLabel1',
-              'value': 'FieldValue1',
+              fields: [
+                {
+                  'name': 'FieldName1',
+                  'label': 'FieldLabel1',
+                  'value': 'FieldValue1-1',
+                },
+                {
+                  'name': 'FieldName2',
+                  'label': 'FieldLabel2',
+                  'value': 'FieldValue1-2',
+                },
+                ...
+              ]
             },
             {
-              'name': 'FieldName2',
-              'label': 'FieldLabel2',
-              'value': 'FieldValue2',
+              fields: [
+                {
+                  'name': 'FieldName1',
+                  'label': 'FieldLabel1',
+                  'value': 'FieldValue2-1',
+                },
+                {
+                  'name': 'FieldName2',
+                  'label': 'FieldLabel2',
+                  'value': 'FieldValue2-2',
+                },
+                ...
+              ]
             },
             ...
           ]
@@ -235,14 +255,34 @@ If you need custom processing, be sure and set the following:
           ],
           items : [
             {
-              'name': 'FieldName1',
-              'label': 'FieldLabel1',
-              'value': 'FieldValue1',
+              fields: [
+                {
+                  'name': 'FieldName1',
+                  'label': 'FieldLabel1',
+                  'value': 'FieldValue1-1',
+                },
+                {
+                  'name': 'FieldName2',
+                  'label': 'FieldLabel2',
+                  'value': 'FieldValue1-2',
+                },
+                ...
+              ]
             },
             {
-              'name': 'FieldName2',
-              'label': 'FieldLabel2',
-              'value': 'FieldValue2',
+              fields: [
+                {
+                  'name': 'FieldName1',
+                  'label': 'FieldLabel1',
+                  'value': 'FieldValue2-1',
+                },
+                {
+                  'name': 'FieldName2',
+                  'label': 'FieldLabel2',
+                  'value': 'FieldValue2-2',
+                },
+                ...
+              ]
             },
             ...
           ]
