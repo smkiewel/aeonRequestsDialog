@@ -556,6 +556,14 @@ All methods are called using the default jQuery style. E.g.:
 
   default: ''
 
+* 'buttonsMessage': message to be displayed above the submit and cancel buttons
+
+  default: ''
+
+* 'footer': footer message
+
+  default: ''
+
 * 'includeSimpleCopyOption': include the simple copy options
 
   default: false
@@ -625,14 +633,6 @@ All methods are called using the default jQuery style. E.g.:
 * 'userReviewLabel': label for the user review option
 
   default: 'Keep this request saved in your account for later review. It will not be sent to Libraries staff for fulfilment.'
-
-* 'buttonsMessage': message to be displayed above the submit and cancel buttons
-
-  default: ''
-
-* 'footer': footer message
-
-  default: '<i>* Requested items will be grouped by container in the Aeon system.</i>'
 
 * 'compressRequests': set to true to compress requests on a given field
 

@@ -212,7 +212,7 @@
           'buttonsMessage': '',
 
           //footer messgae
-          'footer': '<i>* Requested items will be grouped by container in the Aeon system.</i>',
+          'footer': '',
 
           //simple copy options
           'includeSimpleCopyOption': false,
