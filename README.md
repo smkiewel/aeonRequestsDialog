@@ -769,21 +769,23 @@ All methods are called using the default jQuery style. E.g.:
             '</div>' +
           '<% } %>' +
           '<% if (this.includeScheduledDate) { %>' +
-            '<% if ( this.scheduledDateMessage ) { %>' +
-              '<div class="scheduled_date_message message"><%= this.scheduledDateMessage %></div>' +
-            '<% } %>' +
-            '<div class="rev_sched_opt">' +
-              '<input type="radio" name="UserReview" class="schedule_opt scheduled_date_radio" value="No" checked="checked"/>' +
-            '</div>' +
-            '<div class="scheduled_date">' +
-              '<label for="scheduled_date_radio"><span class="label"><%= this.scheduledDateLabel %></span></label><br/>' +
-              '<input type="text" class="datepicker"  name="ScheduledDate"/>' +
-            '</div>' +
-            '<div class="rev_sched_opt">' +
-              '<input type="radio" name="UserReview" value="Yes" class="schedule_opt user_review_radio"/>' +
-            '</div>' +
-            '<div class="review disabled">' +
-              '<label for="user_review_radio"><%= this.userReviewLabel %></label>' +
+            '<div class="scheduled_date_options">'+
+              '<% if ( this.scheduledDateMessage ) { %>' +
+                '<div class="scheduled_date_message message"><%= this.scheduledDateMessage %></div>' +
+              '<% } %>' +
+              '<div class="rev_sched_opt">' +
+                '<input type="radio" name="UserReview" class="schedule_opt scheduled_date_radio" value="No" checked="checked"/>' +
+              '</div>' +
+              '<div class="scheduled_date">' +
+                '<label for="scheduled_date_radio"><span class="label"><%= this.scheduledDateLabel %></span></label><br/>' +
+                '<input type="text" class="datepicker"  name="ScheduledDate"/>' +
+              '</div>' +
+              '<div class="rev_sched_opt">' +
+                '<input type="radio" name="UserReview" value="Yes" class="schedule_opt user_review_radio"/>' +
+              '</div>' +
+              '<div class="review disabled">' +
+                '<label for="user_review_radio"><%= this.userReviewLabel %></label>' +
+              '</div>' +
             '</div>' +
           '<% } %>' +
           '<div class="buttons">' +
