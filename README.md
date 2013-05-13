@@ -339,8 +339,9 @@ This plugin has some extra behaviors and UI elements available for use.
   'advancedCopyMessage'.
 
 * Clean values: performs string substitution on the values obtained during
-  form processing ONLY. By default, this performs a head and tail trim. To
-  customize, set 'clean_values' to the function that will perform the clean.
+  form processing ONLY. By default, this performs a head and tail trim of
+  whitespace. To customize, set 'clean_values' to the function
+  that will perform the clean.
 
 * Compress requests: compresses requests on a given field, to minimize the
   number of requests that appear in the Aeon system. E.g. if a user wants to
@@ -454,6 +455,8 @@ All methods are called using the default jQuery style. E.g.:
 
 ### Options
 
+* 'url': url to Aeon DLL
+
 * 'dialogId': id of the main dialog div. If putting more than one dialog on a
   page, be sure and set this to something other than default on second dialog.
 
@@ -462,21 +465,6 @@ All methods are called using the default jQuery style. E.g.:
 * 'submitButtonSelector': selector of button used to show dialog
 
   default: '.aeon_submit',
-
-* 'useDefaultBindings': setup default bindings. Set to false if completely
-  replacing template.
-
-  default: true
-
-* 'compressRequests': set to true to compress requests on a given field
-
-  default: false
-
-* 'compressRequestsField': field to compress on
-
-  default: 'ItemNumber'
-
-* 'url': url to Aeon DLL
 
 * 'AeonForm': argument passed to Aeon DLL for processing on their side
 
@@ -493,17 +481,13 @@ All methods are called using the default jQuery style. E.g.:
 
   default: form
 
-* 'globalFields': fields common to all requests
+* 'form': id of form for form processing
 
-  default: []
+  default: 'EADRequest'
 
-* 'itemFields': fields for individual items
+* 'checkedItemSelector': selector for checked items
 
-  default: []
-
-* 'items': items to be requested
-
-  default: []
+  default: 'input[name="Request"]:checked',
 
 * 'json_url': url to json
 
@@ -521,9 +505,48 @@ All methods are called using the default jQuery style. E.g.:
 
   default: null
 
-* 'items_attachpoint_selector': selector for attachpoint of items
+* 'globalFields': fields common to all requests
 
-  default: '.aeon_request_items'
+  default: []
+
+* 'itemFields': fields for individual items
+
+  default: []
+
+* 'items': items to be requested
+
+  default: []
+
+* 'useDefaultBindings': setup default bindings. Set to false if completely
+  replacing template.
+
+  default: true
+
+* 'createDialog': event hook for dialog creation
+
+  default: function(){return this;}
+
+* 'destroyDialog': event hook for dialog destruction
+
+  default: function (){return this;}
+
+* 'onSubmit': event hook for form submission
+
+  default: function(){return true;},
+
+* 'minWidth': minimum width of dialog
+
+  default: 750
+
+* 'width': width of dialog
+
+* 'maxWidth': max width of dialog
+
+* 'minHeight': minimum height of dialog
+
+* 'height': height of dialog
+
+* 'maxHeight': max height of dialog
 
 * 'title': dialog title
 
@@ -532,35 +555,6 @@ All methods are called using the default jQuery style. E.g.:
 * 'header': header message
 
   default: ''
-
-* 'includeNotes': include the notes field
-
-  default: true
-
-* 'notesMessage': message to be displayed about notes textarea
-
-  default: 'Please include any notes that might help us identify the specific items requested or any other pertinent information:'
-
-* 'includeScheduledDate': include the scheduled date ui elements
-
-  default: true
-
-* 'scheduledDateLabel': label for the scheduled date option
-
-  default: 'Scheduled Date'
-
-
-* 'userReviewLabel': label for the user review option
-
-  default: 'Keep this request saved in your account for later review. It will not be sent to Libraries staff for fulfilment.'
-
-* 'buttonsMessage': message to be displayed above the submit and cancel buttons
-
-  default: ''
-
-* 'footer': footer message
-
-  default: '<i>* Requested items will be grouped by container in the Aeon system.</i>'
 
 * 'includeSimpleCopyOption': include the simple copy options
 
@@ -610,47 +604,77 @@ All methods are called using the default jQuery style. E.g.:
 
   default: 'For Publication'
 
-* 'minWidth': minimum width of dialog
+* 'includeNotes': include the notes field
 
-  default: 750
+  default: true
 
-* 'width': width of dialog
+* 'notesMessage': message to be displayed about notes textarea
 
-* 'maxWidth': max width of dialog
+  default: 'Please include any notes that might help us identify the specific items requested or any other pertinent information:'
 
-* 'minHeight': minimum height of dialog
+* 'includeScheduledDate': include the scheduled date ui elements
 
-* 'height': height of dialog
+  default: true
 
-* 'maxHeight': max height of dialog
+* 'scheduledDateMessage': message to be displayed above the scheduled date options
 
-* 'createDialog': event hook for dialog creation
+* 'scheduledDateLabel': label for the scheduled date option
 
-  default: function(){return this;}
+  default: 'Scheduled Date'
 
-* 'destroyDialog': event hook for dialog destruction
+* 'userReviewLabel': label for the user review option
 
-  default: function (){return this;}
+  default: 'Keep this request saved in your account for later review. It will not be sent to Libraries staff for fulfilment.'
 
-* 'onSubmit': event hook for form submission
+* 'buttonsMessage': message to be displayed above the submit and cancel buttons
 
-  default: function(){return true;},
+  default: ''
 
-* 'form': id of form for form processing
+* 'footer': footer message
 
-  default: 'EADRequest'
+  default: '<i>* Requested items will be grouped by container in the Aeon system.</i>'
 
-* 'checkedItemSelector': selector for checked items
+* 'compressRequests': set to true to compress requests on a given field
 
-  default: 'input[name="Request"]:checked',
+  default: false
+
+* 'compressRequestsField': field to compress on
+
+  default: 'ItemNumber'
 
 * 'cleanValues': function used during form processing to clean values from form
 
   default:
 
         function(s){
-          return s.replace(/(^\s*)|(\s*$)/g, "").replace(/(\n|\t)/g, '');
+          return s.replace(/^\s*/, "").replace(/\s*$/,'');
         }
+
+* 'items_attachpoint_selector': selector for attachpoint of items
+
+  default: '.aeon_request_items'
+
+* 'items_template': jqote template for items
+
+  default:
+
+        '<div>' +
+          '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
+            '<div class="requestItem" style="clear:both">' +
+              '<div class="request_inputs">' +
+                '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + "\n" +
+                '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
+                  '<input type="hidden" name="<%= this.items[x].fields[y].name %>_<%= x %>" value="<%= this.items[x].fields[y].value %>">' +
+                '<% } %>' +
+              '</div>' + "\n" +
+              '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
+                '<% if ( this.items[x].fields[y].label ) { %>' +
+                  '<div class="requestDesc"><span class="label"><%= this.items[x].fields[y].label %>:</span> <%= this.items[x].fields[y].value %></div>' +
+                '<% } %>' +
+              '<% } %>' +
+            '</div>' + "\n" +
+          '<% } %>' + "\n" +
+        '</div>'
 
 * 'template': jqote template for dialog
 
@@ -669,18 +693,20 @@ All methods are called using the default jQuery style. E.g.:
           '<div class="aeon_request_items"></div>' +
           '<% if ( this.includeSimpleCopyOption ) { %>' +
             '<div class="simple_copy_opt">' +
+              '<% if ( this.simpleCopyMessage ) { %>' +
+                '<div class="simple_copy_message message"><%= this.simpleCopyMessage %></div>' +
+              '<% } %>' +
               '<div class="request_inputs">' +
                 '<input type="checkbox" class="copy_check" value="Yes"/>' +
               '</div>' +
               '<div class="requestDesc"><label for="aeon_request_copy"><span class="label"><%= this.simpleCopyLabel %></span></label></div>' +
-              '<% if ( this.simpleCopyMessage ) { %>' +
-                '<div class="requestDesc"><%= this.simpleCopyMessage %></div>' +
-              '<% } %>' +
             '</div>' +
           '<% } %>' +
           '<% if ( this.includeAdvancedCopyOptions ) { %>' +
             '<div class="advanced_copy_opt">' +
-              '<div class="adv_copy_message"><%= this.advancedCopyMessage %></div>' +
+              '<% if ( this.advancedCopyMessage ) { %>' +
+                '<div class="adv_copy_message message"><%= this.advancedCopyMessage %></div>' +
+              '<% } %>' +
               '<div class="adv_copy_element">' +
                 '<label for="Format" class="label"><%= this.formatLabel %></label>' +
                 '<select name="Format" class="adv_copy_select">' +
@@ -729,21 +755,24 @@ All methods are called using the default jQuery style. E.g.:
           '<% if ( this.includeNotes ) { %>' +
             '<div class="notes">' +
               '<% if ( this.notesMessage ) { %>' +
-                '<label for="Notes"><span class="label"><%= this.notesMessage %></span></label><br/>' +
+                '<label for="Notes" class="notes_message message"><%= this.notesMessage %></label><br/>' +
               '<% } %>' +
               '<textarea name="Notes" cols="60" rows="4"></textarea>' +
             '</div>' +
           '<% } %>' +
           '<% if (this.includeScheduledDate) { %>' +
+            '<% if ( this.scheduledDateMessage ) { %>' +
+              '<div class="scheduled_date_message message"><%= this.scheduledDateMessage %></div>' +
+            '<% } %>' +
             '<div class="rev_sched_opt">' +
-              '<input type="radio" name="UserReview" id="scheduled_date_radio" class="schedule_opt" value="No" checked="checked"/>' +
+              '<input type="radio" name="UserReview" class="schedule_opt scheduled_date_radio" value="No" checked="checked"/>' +
             '</div>' +
             '<div class="scheduled_date">' +
               '<label for="scheduled_date_radio"><span class="label"><%= this.scheduledDateLabel %></span></label><br/>' +
               '<input type="text" class="datepicker"  name="ScheduledDate"/>' +
             '</div>' +
             '<div class="rev_sched_opt">' +
-              '<input type="radio" name="UserReview" id="user_review_radio" value="Yes" class="schedule_opt"/>' +
+              '<input type="radio" name="UserReview" value="Yes" class="schedule_opt user_review_radio"/>' +
             '</div>' +
             '<div class="review disabled">' +
               '<label for="user_review_radio"><%= this.userReviewLabel %></label>' +
@@ -751,7 +780,7 @@ All methods are called using the default jQuery style. E.g.:
           '<% } %>' +
           '<div class="buttons">' +
             '<% if ( this.buttonsMessage ) { %>' +
-              '<div class="buttonMessage"><%= this.buttonsMessage %></div>' +
+              '<div class="buttonMessage message"><%= this.buttonsMessage %></div>' +
             '<% } %>' +
             '<input type="submit" value="Submit Request" class="dialog_submit"/>' +
             '<input type="reset" value="Cancel" class="dialog_cancel"/>' +
@@ -759,27 +788,4 @@ All methods are called using the default jQuery style. E.g.:
           '<% if ( this.footer ) { %>' +
             '<div class="aeon_footer"><%= this.footer %></div>' +
           '<% } %>' +
-        '</form>'
-
-* 'items_template': jqote template for items
-
-  default:
-
-        '<div>' +
-          '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
-            '<div class="requestItem" style="clear:both">' +
-              '<div class="request_inputs">' +
-                '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + "\n" +
-                '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
-                  '<input type="hidden" name="<%= this.items[x].fields[y].name %>_<%= x %>" value="<%= this.items[x].fields[y].value %>">' +
-                '<% } %>' +
-              '</div>' + "\n" +
-              '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
-                '<% if ( this.items[x].fields[y].label ) { %>' +
-                  '<div class="requestDesc"><span class="label"><%= this.items[x].fields[y].label %>:</span> <%= this.items[x].fields[y].value %></div>' +
-                '<% } %>' +
-              '<% } %>' +
-            '</div>' + "\n" +
-          '<% } %>' + "\n" +
-        '</div>'
-
+        '</form>',

@@ -67,18 +67,20 @@
                         '<div class="aeon_request_items"></div>' +
                         '<% if ( this.includeSimpleCopyOption ) { %>' +
                           '<div class="simple_copy_opt">' +
+                            '<% if ( this.simpleCopyMessage ) { %>' +
+                              '<div class="simple_copy_message message"><%= this.simpleCopyMessage %></div>' +
+                            '<% } %>' +
                             '<div class="request_inputs">' +
                               '<input type="checkbox" class="copy_check" value="Yes"/>' +
                             '</div>' +
                             '<div class="requestDesc"><label for="aeon_request_copy"><span class="label"><%= this.simpleCopyLabel %></span></label></div>' +
-                            '<% if ( this.simpleCopyMessage ) { %>' +
-                              '<div class="requestDesc"><%= this.simpleCopyMessage %></div>' +
-                            '<% } %>' +
                           '</div>' +
                         '<% } %>' +
                         '<% if ( this.includeAdvancedCopyOptions ) { %>' +
                           '<div class="advanced_copy_opt">' +
-                            '<div class="adv_copy_message"><%= this.advancedCopyMessage %></div>' +
+                            '<% if ( this.advancedCopyMessage ) { %>' +
+                              '<div class="adv_copy_message message"><%= this.advancedCopyMessage %></div>' +
+                            '<% } %>' +
                             '<div class="adv_copy_element">' +
                               '<label for="Format" class="label"><%= this.formatLabel %></label>' +
                               '<select name="Format" class="adv_copy_select">' +
@@ -127,21 +129,24 @@
                         '<% if ( this.includeNotes ) { %>' +
                           '<div class="notes">' +
                             '<% if ( this.notesMessage ) { %>' +
-                              '<label for="Notes"><span class="label"><%= this.notesMessage %></span></label><br/>' +
+                              '<label for="Notes" class="notes_message message"><%= this.notesMessage %></label><br/>' +
                             '<% } %>' +
                             '<textarea name="Notes" cols="60" rows="4"></textarea>' +
                           '</div>' +
                         '<% } %>' +
                         '<% if (this.includeScheduledDate) { %>' +
+                          '<% if ( this.scheduledDateMessage ) { %>' +
+                            '<div class="scheduled_date_message message"><%= this.scheduledDateMessage %></div>' +
+                          '<% } %>' +
                           '<div class="rev_sched_opt">' +
-                            '<input type="radio" name="UserReview" id="scheduled_date_radio" class="schedule_opt" value="No" checked="checked"/>' +
+                            '<input type="radio" name="UserReview" class="schedule_opt scheduled_date_radio" value="No" checked="checked"/>' +
                           '</div>' +
                           '<div class="scheduled_date">' +
                             '<label for="scheduled_date_radio"><span class="label"><%= this.scheduledDateLabel %></span></label><br/>' +
                             '<input type="text" class="datepicker"  name="ScheduledDate"/>' +
                           '</div>' +
                           '<div class="rev_sched_opt">' +
-                            '<input type="radio" name="UserReview" id="user_review_radio" value="Yes" class="schedule_opt"/>' +
+                            '<input type="radio" name="UserReview" value="Yes" class="schedule_opt user_review_radio"/>' +
                           '</div>' +
                           '<div class="review disabled">' +
                             '<label for="user_review_radio"><%= this.userReviewLabel %></label>' +
@@ -149,7 +154,7 @@
                         '<% } %>' +
                         '<div class="buttons">' +
                           '<% if ( this.buttonsMessage ) { %>' +
-                            '<div class="buttonMessage"><%= this.buttonsMessage %></div>' +
+                            '<div class="buttonMessage message"><%= this.buttonsMessage %></div>' +
                           '<% } %>' +
                           '<input type="submit" value="Submit Request" class="dialog_submit"/>' +
                           '<input type="reset" value="Cancel" class="dialog_cancel"/>' +
@@ -194,6 +199,8 @@
           'notesMessage': 'Please include any notes that might help us identify the specific items requested or any other pertinent information:',
 
           'includeScheduledDate':true,
+
+          'scheduledDateMessage':'',
 
           //scheduled date label
           'scheduledDateLabel': 'Scheduled Date',
@@ -241,7 +248,7 @@
 
 
           'cleanValues': function(s){
-            return s.replace(/(^\s*)|(\s*$)/g, "").replace(/(\n|\t)/g, '');
+            return s.replace(/^\s*/, "").replace(/\s*$/,'');
           }
 
         }, options);
