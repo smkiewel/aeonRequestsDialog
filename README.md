@@ -556,6 +556,14 @@ All methods are called using the default jQuery style. E.g.:
 
   default: ''
 
+* 'submitButtonLabel': label on the dialog's submit button
+
+  default: 'Submit Request'
+
+* 'cancelButtonLabel': label on the dialog's cancel button
+
+  default: 'Cancel Request'
+
 * 'buttonsMessage': message to be displayed above the submit and cancel buttons
 
   default: ''

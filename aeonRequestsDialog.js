@@ -156,8 +156,8 @@
                           '<% if ( this.buttonsMessage ) { %>' +
                             '<div class="buttonMessage message"><%= this.buttonsMessage %></div>' +
                           '<% } %>' +
-                          '<input type="submit" value="Submit Request" class="dialog_submit"/>' +
-                          '<input type="reset" value="Cancel" class="dialog_cancel"/>' +
+                          '<input type="submit" value="<%= this.submitButtonLabel %>" class="dialog_submit"/>' +
+                          '<input type="reset" value="<%= this.cancelButtonLabel %>" class="dialog_cancel"/>' +
                         '</div>' +
                         '<% if ( this.footer ) { %>' +
                           '<div class="aeon_footer"><%= this.footer %></div>' +
@@ -210,6 +210,9 @@
 
           //buttons message
           'buttonsMessage': '',
+
+          'submitButtonLabel':'Submit Request',
+          'cancelButtonLabel': 'Cancel Request',
 
           //footer messgae
           'footer': '',
@@ -265,9 +268,11 @@
         $(this).data('aeonRequestsDialog', {
           settings: settings
         });
-      }
 
-      $('body').jqoteapp('<div style="display:none"><div id="<%= this.dialogId %>" title="<%= this.title %>" class="aeon_request"></div></div>',settings);
+        $('body').jqoteapp('<div style="display:none"><div id="<%= this.dialogId %>" title="<%= this.title %>" class="aeon_request"></div></div>',settings);
+      } else {
+        console.log( "aeonRequestsDialog already initialized" );
+      }
 
       return this;
     },
