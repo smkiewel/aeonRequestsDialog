@@ -1,3 +1,4 @@
+.ui-dialog .ui-dialog-titlebar{text-align:left}
 .aeon_request {font-size: .8em; text-align: left}
 .aeon_request .label { font-weight: bold; }
 .aeon_request .requestItem { padding: 1em 0; }
