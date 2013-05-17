@@ -255,7 +255,7 @@
             return s.replace(/^\s*/, "").replace(/\s*$/,'');
           },
 
-          'stripUnchecked':false,
+          'stripUnchecked':true
 
         }, options);
 
@@ -493,10 +493,7 @@
       var idSelector = '#' + settings.dialogId;
       var uncheckedSelector = idSelector + ' ' + settings.requestsSelector + ':not(:checked)';
       $(uncheckedSelector).each( function(){
-        var reqNo = $(this).val();
-        for ( var x=0; x < settings.itemFields.length; x++ ) {
-          $(idSelector + ' input[name="'+settings.itemFields[x].name + '_' + reqNo +'"]').remove();
-        }
+        $(idSelector + ' input[name$="_' + $(this).val() +'"]').remove();
       });
     },
     options: function(){

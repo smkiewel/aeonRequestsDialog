@@ -223,7 +223,7 @@ be sure and check the following:
           'showJSON': 1
         }
 
-* If using compressRequests or stripUnchecked, you must set itemFields.
+* If using compressRequests, you must set itemFields.
 
 ### Custom
 
@@ -296,7 +296,7 @@ If you need custom processing, be sure and set the following:
   If a null (or other 'falsey') value is returned from this function, the dialog
   will not be shown.
 
-* If using compressRequests or stripUnchecked, you must set itemFields.
+* If using compressRequests, you must set itemFields.
 
 ## UI and Behavior extras
 
@@ -382,9 +382,7 @@ This plugin has some extra behaviors and UI elements available for use.
   Requires that itemFields is defined.
 
 * Strip unchecked: strips out the hidden form values holding the item information
-  for items that are unchecked on the dialog on dialog submission.
-
-  Requires that itemFields is defined.
+  for items that are unchecked on the dialog on dialog submission. On by default.
 
 ## Customization
 
@@ -663,7 +661,7 @@ All methods are called using the default jQuery style. E.g.:
 
 * 'stripUnchecked': set to true to strip form fields for unchecked items
 
-  default: false
+  default: true
 
 * 'cleanValues': function used during form processing to clean values from form
 
