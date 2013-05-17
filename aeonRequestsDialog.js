@@ -63,7 +63,17 @@
                         '<% if ( this.header ) { %>' +
                           '<div class="aeon_request_header"><%= this.header %></div>' +
                         '<% } %>' +
+                        '<% if ( this.selectAllButtonsPosition === "top" || this.selectAllButtonsPosition === "both" ) { %>' +
+                          '<% if ( !this.selectAllButtonsShowAt || ( this.items.length >= this.selectAllButtonsShowAt ) ) { %>' +
+                            '<div class="select_all_buttons"><button class="select_all">Select All</button><button class="select_none">Select None</button></div>' +
+                          '<% } %>' +
+                        '<% } %>' +
                         '<div class="aeon_request_items"></div>' +
+                        '<% if ( this.selectAllButtonsPosition === "bottom" || this.selectAllButtonsPosition === "both" ) { %>' +
+                          '<% if ( !this.selectAllButtonsShowAt || ( this.items.length >= this.selectAllButtonsShowAt ) ) { %>' +
+                            '<div class="select_all_buttons"><button class="select_all">Select All</button><button class="select_none">Select None</button></div>' +
+                          '<% } %>' +
+                        '<% } %>' +
                         '<% if ( this.includeSimpleCopyOption ) { %>' +
                           '<div class="simple_copy_opt">' +
                             '<% if ( this.simpleCopyMessage ) { %>' +
@@ -255,7 +265,10 @@
             return s.replace(/^\s*/, "").replace(/\s*$/,'');
           },
 
-          'stripUnchecked':true
+          'stripUnchecked':true,
+
+          'selectAllButtonsPosition': '',
+          'selectAllButtonsShowAt': 0,
 
         }, options);
 
@@ -356,6 +369,18 @@
       var settings = this.data('aeonRequestsDialog').settings;
       var idSelector = '#' + settings.dialogId;
       $( idSelector +  ' .datepicker').datepicker({minDate:0}).val($.datepicker.formatDate('mm/dd/yy',new Date()));
+
+      $(idSelector + ' .select_all').on( 'click.aeonRequestsDialog' + idSelector, function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $(idSelector + ' ' + settings.requestsSelector).prop('checked',true);
+      });
+
+      $(idSelector + ' .select_none').on( 'click.aeonRequestsDialog' + idSelector, function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $(idSelector + ' ' + settings.requestsSelector).prop('checked',false);
+      });
 
       if ( settings.includeSimpleCopyOption ) {
         $(idSelector + ' .copy_check').on( 'change.aeonRequestsDialog' + idSelector, function(){

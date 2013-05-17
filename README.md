@@ -302,6 +302,13 @@ If you need custom processing, be sure and set the following:
 
 This plugin has some extra behaviors and UI elements available for use.
 
+* Select All and Select None buttons: pair of buttons for selecting all or none
+  of the requested items on the dialog. To enable, set selectAllButtonsPosition
+  to one of: top, bottom, both; buttons will be added to the top, bottom, or
+  both, of the items display. The buttons are also optionally limited by a
+  minimum item count threshhold: set selectAllButtonsShowAt to the number of
+  items you wish as a minimum threshhold.
+
 * Notes field: by default, a textarea for notes is added with a customizable
   message. To disable, set 'includeNotes' to false. To customize the message,
   set 'notesMessage' to the desired message.
@@ -581,6 +588,18 @@ All methods are called using the default jQuery style. E.g.:
 
   default: ''
 
+* 'selectAllButtonsPosition': position(s) to show select all/none buttons at. Values:
+  1. '': no buttons
+  2. 'top': top of item display
+  3. 'bottom': bottom of item display
+  4. 'both': both top and bottom of item display
+
+  default: ''
+
+* 'selectAllButtonsShowAt': number of items required before buttons are shown
+
+  default: 0
+
 * 'includeSimpleCopyOption': include the simple copy options
 
   default: false
@@ -711,7 +730,17 @@ All methods are called using the default jQuery style. E.g.:
           '<% if ( this.header ) { %>' +
             '<div class="aeon_request_header"><%= this.header %></div>' +
           '<% } %>' +
+          '<% if ( this.selectAllButtonsPosition === "top" || this.selectAllButtonsPosition === "both" ) { %>' +
+            '<% if ( !this.selectAllButtonsShowAt || ( this.items.length >= this.selectAllButtonsShowAt ) ) { %>' +
+              '<div class="select_all_buttons"><button class="select_all">Select All</button><button class="select_none">Select None</button></div>' +
+            '<% } %>' +
+          '<% } %>' +
           '<div class="aeon_request_items"></div>' +
+          '<% if ( this.selectAllButtonsPosition === "bottom" || this.selectAllButtonsPosition === "both" ) { %>' +
+            '<% if ( !this.selectAllButtonsShowAt || ( this.items.length >= this.selectAllButtonsShowAt ) ) { %>' +
+              '<div class="select_all_buttons"><button class="select_all">Select All</button><button class="select_none">Select None</button></div>' +
+            '<% } %>' +
+          '<% } %>' +
           '<% if ( this.includeSimpleCopyOption ) { %>' +
             '<div class="simple_copy_opt">' +
               '<% if ( this.simpleCopyMessage ) { %>' +
