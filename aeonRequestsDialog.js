@@ -248,7 +248,7 @@
           'form': 'EADRequest',
 
           //selector for checked items
-          'checkedItemSelector':'input[name="Request"]:checked',
+          'requestsSelector':'input[name="Request"]',
 
 
           'cleanValues': function(s){
@@ -384,7 +384,7 @@
       $(idSelector + ' .dialog_submit').on('click.aeonRequestsDialog' + idSelector,function(e){
         e.preventDefault();
         e.stopPropagation();
-        if ( $(idSelector+' ' + settings.checkedItemSelector).length == 0 ) {
+        if ( $(idSelector+' ' + settings.requestsSelector + ':checked').length == 0 ) {
           return;
         }
 
@@ -418,7 +418,7 @@
     '_processForm': function (){
       var settings = this.data('aeonRequestsDialog').settings;
       settings.items = [];
-      $(settings.checkedItemSelector).each(function(){
+      $(settings.requestsSelector + ':checked').each(function(){
         var id = $(this).val();
         var i = { 'fields': [] };
         for (var x=0;x<settings.itemFields.length;x++) {
@@ -443,7 +443,7 @@
       var codes = {};
       var idSelector = '#'+settings.dialogId;
       var fieldName = settings.compressRequestsField;
-      var requestsSelector = idSelector+' ' + settings.checkedItemSelector;
+      var requestsSelector = idSelector+' ' + settings.requestsSelector + ':checked';
       var requests = $(requestsSelector);
       var newReqNum = requests.length;
 
