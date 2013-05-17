@@ -255,7 +255,7 @@
             return s.replace(/^\s*/, "").replace(/\s*$/,'');
           },
 
-          'stripUnchecked': true,
+          'stripUnchecked':false,
 
         }, options);
 
