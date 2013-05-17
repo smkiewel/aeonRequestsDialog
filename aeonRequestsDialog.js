@@ -268,7 +268,7 @@
           'stripUnchecked':true,
 
           'selectAllButtonsPosition': '',
-          'selectAllButtonsShowAt': 0,
+          'selectAllButtonsShowAt': 0
 
         }, options);
 
