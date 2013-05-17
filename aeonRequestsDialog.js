@@ -489,7 +489,15 @@
       }
     },
     _stripUnchecked: function(){
-
+      var settings = this.data('aeonRequestsDialog').settings;
+      var idSelector = '#' + settings.dialogId;
+      var uncheckedSelector = idSelector + ' ' + settings.requestsSelector + ':not(:checked)';
+      $(uncheckedSelector).each( function(){
+        var reqNo = $(this).val();
+        for ( var x=0; x < settings.itemFields.length; x++ ) {
+          $(idSelector + ' input[name="'+settings.itemFields[x].name + '_' + reqNo +'"]').remove();
+        }
+      });
     },
     options: function(){
       var settings = this.data('aeonRequestsDialog').settings;
