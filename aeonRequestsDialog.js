@@ -15,7 +15,6 @@
           'compressRequests': false,
           'compressRequestsField': 'ItemNumber',
 
-
           //aeon url
           'url': '',
 
@@ -254,7 +253,9 @@
 
           'cleanValues': function(s){
             return s.replace(/^\s*/, "").replace(/\s*$/,'');
-          }
+          },
+
+          'stripUnchecked': true,
 
         }, options);
 
@@ -383,7 +384,7 @@
       $(idSelector + ' .dialog_submit').on('click.aeonRequestsDialog' + idSelector,function(e){
         e.preventDefault();
         e.stopPropagation();
-        if ( $(idSelector+' input[name="Request"]:checked').length == 0 ) {
+        if ( $(idSelector+' ' + settings.checkedItemSelector).length == 0 ) {
           return;
         }
 
@@ -391,6 +392,12 @@
           return;
         }
 
+        $('div.ui-widget-overlay').remove();
+        $('div.ui-dialog').css('display','none');
+
+        if ( settings.stripUnchecked ) {
+          methods._stripUnchecked.apply($this,null);
+        }
 
         if ( settings.compressRequests ) {
           methods._compressRequests.apply($this,null);
@@ -436,7 +443,8 @@
       var codes = {};
       var idSelector = '#'+settings.dialogId;
       var fieldName = settings.compressRequestsField;
-      var requests = $(idSelector+' input[name="Request"]:checked');
+      var requestsSelector = idSelector+' ' + settings.checkedItemSelector;
+      var requests = $(requestsSelector);
       var newReqNum = requests.length;
 
       requests.each( function(){
@@ -453,6 +461,7 @@
         if ( requestNumbers.length < 2 ) {
           continue;
         }
+
         var newRequest = {};
         for ( var x=0;x < settings.itemFields.length;x++) {
           var field = settings.itemFields[x].name;
@@ -469,7 +478,7 @@
               newRequest[field] += "; " + oldVal;
             }
             oldField.remove();
-            $('input[name="Request"][value="' + key + '"]').prop('name','oldRequest');
+            $('input[name="Request"][value="' + key + '"]').remove();
           }
         }
         $('<input/>').prop('type','hidden').prop('name','Request').val(newReqNum).appendTo(idSelector+ ' .aeon_request_form' );
@@ -478,6 +487,9 @@
         }
         newReqNum++;
       }
+    },
+    _stripUnchecked: function(){
+
     },
     options: function(){
       var settings = this.data('aeonRequestsDialog').settings;
