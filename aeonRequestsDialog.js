@@ -65,13 +65,19 @@
                         '<% } %>' +
                         '<% if ( this.selectAllButtonsPosition === "top" || this.selectAllButtonsPosition === "both" ) { %>' +
                           '<% if ( !this.selectAllButtonsShowAt || ( this.items.length >= this.selectAllButtonsShowAt ) ) { %>' +
-                            '<div class="select_all_buttons"><button class="select_all">Select All</button><button class="select_none">Select None</button></div>' +
+                            '<div class="select_all_buttons">' +
+                              '<<%= this.selectAllButtonsTag %> class="select_all" <%= this.selectAllButtonsTag === \'a\' ? \'href="#"\' : "" %>><%= this.selectAllButtonLabel %></<%= this.selectAllButtonsTag %>>' +
+                              '<<%= this.selectAllButtonsTag %> class="select_none" <%= this.selectAllButtonsTag === \'a\' ? \'href="#"\' : "" %>><%= this.selectNoneButtonLabel %></<%= this.selectAllButtonsTag %>>' +
+                            '</div>' +
                           '<% } %>' +
                         '<% } %>' +
                         '<div class="aeon_request_items"></div>' +
                         '<% if ( this.selectAllButtonsPosition === "bottom" || this.selectAllButtonsPosition === "both" ) { %>' +
                           '<% if ( !this.selectAllButtonsShowAt || ( this.items.length >= this.selectAllButtonsShowAt ) ) { %>' +
-                            '<div class="select_all_buttons"><button class="select_all">Select All</button><button class="select_none">Select None</button></div>' +
+                            '<div class="select_all_buttons">' +
+                              '<<%= this.selectAllButtonsTag %> class="select_all" <%= this.selectAllButtonsTag === \'a\' ? \'href="#"\' : "" %>><%= this.selectAllButtonLabel %></<%= this.selectAllButtonsTag %>>' +
+                              '<<%= this.selectAllButtonsTag %> class="select_none" <%= this.selectAllButtonsTag === \'a\' ? \'href="#"\' : "" %>><%= this.selectNoneButtonLabel %></<%= this.selectAllButtonsTag %>>' +
+                            '</div>' +
                           '<% } %>' +
                         '<% } %>' +
                         '<% if ( this.includeSimpleCopyOption ) { %>' +
@@ -268,7 +274,10 @@
           'stripUnchecked':true,
 
           'selectAllButtonsPosition': '',
-          'selectAllButtonsShowAt': 0
+          'selectAllButtonsShowAt': 0,
+          'selectAllButtonsTag': 'button',
+          'selectAllButtonLabel': 'Select All',
+          'selectNoneButtonLabel':'Select None'
 
         }, options);
 

@@ -10,3 +10,4 @@
 .aeon_request .advanced_copy_opt .label { display: inline-block; width: 14em;}
 .aeon_request .adv_copy_select { width: 20em;}
 .aeon_request .message { font-weight: bold; margin-bottom: .2em; }
+.aeon_request .select_all { margin-right: .5em; }
