@@ -173,8 +173,13 @@
                           '<% if ( this.buttonsMessage ) { %>' +
                             '<div class="buttonMessage message"><%= this.buttonsMessage %></div>' +
                           '<% } %>' +
-                          '<input type="submit" value="<%= this.submitButtonLabel %>" class="dialog_submit"/>' +
-                          '<input type="reset" value="<%= this.cancelButtonLabel %>" class="dialog_cancel"/>' +
+                          '<% if ( this.submitButtonsTag === "input" ) { %>' +
+                            '<input type="submit" value="<%= this.submitButtonLabel %>" class="dialog_submit"/>' +
+                            '<input type="reset" value="<%= this.cancelButtonLabel %>" class="dialog_cancel"/>' +
+                          '<% } else { %>' +
+                            '<<%= this.submitButtonsTag %> class="dialog_submit" <%= this.submitButtonsTag === \'a\' ? \'href="#"\' : "" %>><%= this.submitButtonLabel %></<%= this.submitButtonsTag %>>' +
+                              '<<%= this.submitButtonsTag %> class="dialog_cancel" <%= this.submitButtonsTag === \'a\' ? \'href="#"\' : "" %>><%= this.cancelButtonLabel %></<%= this.submitButtonsTag %>>' +
+                          '<% } %>' +
                         '</div>' +
                         '<% if ( this.footer ) { %>' +
                           '<div class="aeon_footer"><%= this.footer %></div>' +
@@ -227,9 +232,9 @@
 
           //buttons message
           'buttonsMessage': '',
-
           'submitButtonLabel':'Submit Request',
           'cancelButtonLabel': 'Cancel Request',
+          'submitButtonsTag': 'input',
 
           //footer messgae
           'footer': '',
