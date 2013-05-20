@@ -307,7 +307,9 @@ This plugin has some extra behaviors and UI elements available for use.
   to one of: top, bottom, both; buttons will be added to the top, bottom, or
   both, of the items display. The buttons are also optionally limited by a
   minimum item count threshhold: set selectAllButtonsShowAt to the number of
-  items you wish as a minimum threshhold.
+  items you wish as a minimum threshhold. The labels shown can be customized by
+  setting selectAllButtonLabel and selectNoneButtonLabel. Finally, the buttons
+  can become anchor tags by simply setting selectButtonsTag to 'a'.
 
 * Notes field: by default, a textarea for notes is added with a customizable
   message. To disable, set 'includeNotes' to false. To customize the message,
@@ -396,7 +398,9 @@ This plugin has some extra behaviors and UI elements available for use.
 ### Look
 To update the look, you can set any or all of the labels and messages, which
 include: title, header, footer, and a message above the buttons, along with the
-other labels discussed above.
+other labels discussed above. The submit and cancel buttons can be customized
+by setting their labels, as well as by turning the inputs into buttons or anchor
+tags by setting submitButtonsTag.
 
 In addition, you can set the minWidth, width, maxWidth, minHeight, height, and
 maxHeight properties of the dialog. Only minWidth has a default, which is 750px.
@@ -584,6 +588,13 @@ All methods are called using the default jQuery style. E.g.:
 
   default: ''
 
+* 'submitButtonsTag': html tag to use for creating buttons. Values:
+  1. input: form elements of type submit and reset
+  2. button: button element
+  3. a: anchor tag with href="#"
+
+  default: input
+
 * 'footer': footer message
 
   default: ''
@@ -599,6 +610,20 @@ All methods are called using the default jQuery style. E.g.:
 * 'selectAllButtonsShowAt': number of items required before buttons are shown
 
   default: 0
+
+* 'selectAllButtonsTag': html tag to use for creating buttons: Values:
+  1. button: button element
+  2. a: anchor tag
+
+  default: button
+
+* 'selectAllButtonLabel': label for select all button
+
+  default: 'Select All'
+
+* 'selectNoneButtonLabel': label for select none button
+
+  default: 'Select None'
 
 * 'includeSimpleCopyOption': include the simple copy options
 
@@ -834,8 +859,13 @@ All methods are called using the default jQuery style. E.g.:
             '<% if ( this.buttonsMessage ) { %>' +
               '<div class="buttonMessage message"><%= this.buttonsMessage %></div>' +
             '<% } %>' +
-            '<input type="submit" value="Submit Request" class="dialog_submit"/>' +
-            '<input type="reset" value="Cancel" class="dialog_cancel"/>' +
+            '<% if ( this.submitButtonsTag === "input" ) { %>' +
+              '<input type="submit" value="<%= this.submitButtonLabel %>" class="dialog_submit"/>' +
+              '<input type="reset" value="<%= this.cancelButtonLabel %>" class="dialog_cancel"/>' +
+            '<% } else { %>' +
+              '<<%= this.submitButtonsTag %> class="dialog_submit" <%= this.submitButtonsTag === \'a\' ? \'href="#"\' : "" %>><%= this.submitButtonLabel %></<%= this.submitButtonsTag %>>' +
+                '<<%= this.submitButtonsTag %> class="dialog_cancel" <%= this.submitButtonsTag === \'a\' ? \'href="#"\' : "" %>><%= this.cancelButtonLabel %></<%= this.submitButtonsTag %>>' +
+            '<% } %>' +
           '</div>' +
           '<% if ( this.footer ) { %>' +
             '<div class="aeon_footer"><%= this.footer %></div>' +
