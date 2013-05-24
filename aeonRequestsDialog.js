@@ -50,6 +50,9 @@
           //args to be passed as the content of the json request
           'json_content':null,
 
+          'jsonSubmit': function(){return true;},
+          'jsonComplete': function(data){return true;},
+
           'custom_callback': null,
 
           //jqote template for dialog
@@ -316,7 +319,13 @@
       }
 
       if ( settings.datasource === 'json' ) {
+        if ( !settings.jsonSubmit() )
+          return;
+
         $.getJSON(settings.json_url, settings.json_content,function(data){
+          if ( !settings.jsonComplete(data) ) {
+            return;
+          }
           var o = settings.json_callback(data);
           if ( o ){
             methods.options.apply($this,[o]);

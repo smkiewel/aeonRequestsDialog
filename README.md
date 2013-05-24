@@ -223,6 +223,12 @@ be sure and check the following:
           'showJSON': 1
         }
 
+* There are two event callbacks for the json request: jsonSubmit and jsonComplete.
+  jsonSubmit is called just prior to the AJAX call to fetch the json. jsonComplete
+  is called after the json response has arrived and is passed the json response.
+  Returning a false value from either of these will prevent the dialog from being
+  shown.
+
 * If using compressRequests, you must set itemFields.
 
 ### Custom
@@ -520,6 +526,16 @@ All methods are called using the default jQuery style. E.g.:
 * 'json_content': args to be passed as the content of the json request
 
   default: null
+
+* 'jsonSubmit': callback called just prior to ajax call to fetch json; return
+  false to prevent the dialog from showing
+
+  default: function(){return true;}
+
+* 'jsonComplete': callback called just after json response is received; passed
+  the json response; return false to prevent the dialog from showing
+
+  default: function(data){return true;}
 
 * 'custom_callback': function used in custom processing to provide the data
 
