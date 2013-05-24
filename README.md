@@ -156,7 +156,7 @@ be sure and check the following:
 * 'datasource' must be set to 'json'
 
 * 'jsonUrl' must be set to the url to access the JSON. Query parameters should
-  be included in the 'json_content' field.
+  be included in the 'jsonContent' field.
 
 * 'jsonCallback' must be set to a function that will transform the result of
   the json call into the expected data format and return that object. The
@@ -359,7 +359,7 @@ This plugin has some extra behaviors and UI elements available for use.
 
 * Clean values: performs string substitution on the values obtained during
   form processing ONLY. By default, this performs a head and tail trim of
-  whitespace. To customize, set 'clean_values' to the function
+  whitespace. To customize, set 'cleanValues' to the function
   that will perform the clean.
 
 * Compress requests: compresses requests on a given field, to minimize the
@@ -434,7 +434,7 @@ binding as well as prevent the default bindings from occuring. To do this, see
 'Behavior' section below.
 
 If you change the class of the div used to contain the items, be sure and set
-'items_attachpoint_selector' to the appropriate selector.
+'itemsAttachpointSelector' to the appropriate selector.
 
 ### Behavior
 To customize behavior, three event hooks have been added: createDialog,
