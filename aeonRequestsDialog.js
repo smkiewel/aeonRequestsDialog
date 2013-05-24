@@ -7,55 +7,105 @@
       // If the plugin hasn't been initialized yet
       if ( ! data ) {
         settings = $.extend( {
-          //dialog id
-          'dialogId': 'aeon_request_dialog',
-
-          'useDefaultBindings': true,
-
-          'compressRequests': false,
-          'compressRequestsField': 'ItemNumber',
-
-          //aeon url
+          //general settings
           'url': '',
-
-          //'AeonForm' value holder
-          //assume needed by dll?
+          'dialogId': 'aeon_request_dialog',
+          'submitButtonSelector': '.aeon_submit',
           'AeonForm': 'EADRequest',
-
-          //loan or copy
           'RequestType': 'Loan',
-
-          //sets source of data for dialog
-          //three possible values:
-          //  1) form: use default form processing
-          //  2) json: use default json processsing
-          //  3) custom: provide custom data processing
+          'globalFields': [],
+          'itemFields': [],
+          'items': [],
           'datasource': 'form',
 
-          //fields common to all requests
-          'globalFields': [],
+          //form processing
+          'form': 'EADRequest',
+          'requestsSelector':'input[name="Request"]',
 
-          //fields for individual items
-          'itemFields': [],
-
-          //items
-          'items': [],
-
-          //function to determine url for json response
-          'json_url': null,
-
-          //callback for json response
-          'json_callback': null,
-
-          //args to be passed as the content of the json request
-          'json_content':null,
-
+          //json processing
+          'jsonUrl': null,
+          'jsonCallback': null,
+          'jsonContent':null,
           'jsonSubmit': function(){return true;},
           'jsonComplete': function(data){return true;},
 
-          'custom_callback': null,
+          //custom processing
+          'customCallback': null,
 
-          //jqote template for dialog
+          //basic behavior
+          'useDefaultBindings': true,
+          'createDialog': function(){return this;},
+          'destroyDialog': function (){return this;},
+          'onSubmit': function(){return true;},
+
+          //basic look
+          'minWidth': 750,
+          'title': 'Confirm your request',
+          'header': '',
+          'footer': '',
+          'submitButtonsMessage': '',
+          'submitButtonLabel':'Submit Request',
+          'cancelButtonLabel': 'Cancel Request',
+          'submitButtonsTag': 'input',
+
+          //select all buttons
+          'selectAllButtonsPosition': '',
+          'selectAllButtonsShowAt': 0,
+          'selectAllButtonsTag': 'button',
+          'selectAllButtonLabel': 'Select All',
+          'selectNoneButtonLabel':'Select None',
+
+          //simple copy options
+          'includeSimpleCopyOption': false,
+          'simpleCopyLabel': 'Requesting Duplication of Material',
+          'simpleCopyMessage': '',
+
+          //advanced copy options
+          'includeAdvancedCopyOptions':false,
+          'advancedCopyMessage': '',
+          'formatLabel': 'Format',
+          'formatOptions': [ 'Photocopy', 'Scan (DVD/CD)', 'Scan (Electronic Delivery)' ],
+          'serviceLevelLabel': 'Intended Use',
+          'serviceLevelOptions':['Advertisement (Commercial)', 'Advertisement (PSA)', 'Educational Use', 'Government', 'Live Presentation', 'Museum Use', 'Non Profit', 'Personal Use', 'Preservation Use'],
+          'shippingOptionLabel': 'Shipping Option',
+          'shippingOptions': ['Download/FTP (User Provided)', 'Download/FTP (Institution Provided)', 'Pick up Onsite', 'Fed Ex (User Account)', 'UPS (User Account)', 'USPS (First Class)', 'USPS (Overseas)' ],
+          'forPublicationLabel': 'For Publication',
+
+          //notes
+          'includeNotes': true,
+          'notesMessage': 'Please include any notes that might help us identify the specific items requested or any other pertinent information:',
+
+          //scheduled date
+          'includeScheduledDate':true,
+          'scheduledDateMessage':'',
+          'scheduledDateLabel': 'Scheduled Date',
+          'userReviewLabel': 'Keep this request saved in your account for later review. It will not be sent to Libraries staff for fulfilment.',
+
+          //optional behavior
+          'compressRequests': false,
+          'compressRequestsField': 'ItemNumber',
+          'stripUnchecked':true,
+          'cleanValues': function(s){ return s.replace(/^\s*/, "").replace(/\s*$/,''); },
+
+          //templates
+          'itemsAttachpointSelector': '.aeon_request_items',
+          'itemsTemplate': '<div>' +
+                              '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
+                                '<div class="requestItem" style="clear:both">' +
+                                  '<div class="request_inputs">' +
+                                    '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + "\n" +
+                                    '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
+                                      '<input type="hidden" name="<%= this.items[x].fields[y].name %>_<%= x %>" value="<%= this.items[x].fields[y].value %>">' +
+                                    '<% } %>' +
+                                  '</div>' + "\n" +
+                                  '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
+                                    '<% if ( this.items[x].fields[y].label ) { %>' +
+                                      '<div class="requestDesc"><span class="label"><%= this.items[x].fields[y].label %>:</span> <%= this.items[x].fields[y].value %></div>' +
+                                    '<% } %>' +
+                                  '<% } %>' +
+                                '</div>' + "\n" +
+                              '<% } %>' + "\n" +
+                            '</div>',
           'template':'<form method="POST" action="<%= this.url %>" class="aeon_request_form" target="_self" name="<%= this.AeonForm %>">' +
                         '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
                         '<input name="RequestType" type="hidden" value="<%= this.RequestType %>" />' +
@@ -173,8 +223,8 @@
                           '</div>' +
                         '<% } %>' +
                         '<div class="buttons">' +
-                          '<% if ( this.buttonsMessage ) { %>' +
-                            '<div class="buttonMessage message"><%= this.buttonsMessage %></div>' +
+                          '<% if ( this.submitButtonsMessage ) { %>' +
+                            '<div class="buttonMessage message"><%= this.submitButtonsMessage %></div>' +
                           '<% } %>' +
                           '<% if ( this.submitButtonsTag === "input" ) { %>' +
                             '<input type="submit" value="<%= this.submitButtonLabel %>" class="dialog_submit"/>' +
@@ -187,106 +237,7 @@
                         '<% if ( this.footer ) { %>' +
                           '<div class="aeon_footer"><%= this.footer %></div>' +
                         '<% } %>' +
-                      '</form>',
-
-          //jqote template for items
-          'items_template': '<div>' +
-                              '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
-                                '<div class="requestItem" style="clear:both">' +
-                                  '<div class="request_inputs">' +
-                                    '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + "\n" +
-                                    '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
-                                      '<input type="hidden" name="<%= this.items[x].fields[y].name %>_<%= x %>" value="<%= this.items[x].fields[y].value %>">' +
-                                    '<% } %>' +
-                                  '</div>' + "\n" +
-                                  '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
-                                    '<% if ( this.items[x].fields[y].label ) { %>' +
-                                      '<div class="requestDesc"><span class="label"><%= this.items[x].fields[y].label %>:</span> <%= this.items[x].fields[y].value %></div>' +
-                                    '<% } %>' +
-                                  '<% } %>' +
-                                '</div>' + "\n" +
-                              '<% } %>' + "\n" +
-                            '</div>',
-
-          //selector for attachpoint of items
-          'items_attachpoint_selector': '.aeon_request_items',
-
-          //dialog title
-          'title': 'Confirm your request',
-
-          //header message
-          'header': '',
-
-          //include notes?
-          'includeNotes': true,
-
-          //notes message
-          'notesMessage': 'Please include any notes that might help us identify the specific items requested or any other pertinent information:',
-
-          'includeScheduledDate':true,
-
-          'scheduledDateMessage':'',
-
-          //scheduled date label
-          'scheduledDateLabel': 'Scheduled Date',
-
-          //user review message
-          'userReviewLabel': 'Keep this request saved in your account for later review. It will not be sent to Libraries staff for fulfilment.',
-
-          //buttons message
-          'buttonsMessage': '',
-          'submitButtonLabel':'Submit Request',
-          'cancelButtonLabel': 'Cancel Request',
-          'submitButtonsTag': 'input',
-
-          //footer messgae
-          'footer': '',
-
-          //simple copy options
-          'includeSimpleCopyOption': false,
-          'simpleCopyLabel': 'Requesting Duplication of Material',
-          'simpleCopyMessage': '',
-
-          //advanced copy options
-          'includeAdvancedCopyOptions':false,
-          'advancedCopyMessage': '',
-          'formatLabel': 'Format',
-          'formatOptions': [ 'Photocopy', 'Scan (DVD/CD)', 'Scan (Electronic Delivery)' ],
-          'serviceLevelLabel': 'Intended Use',
-          'serviceLevelOptions':['Advertisement (Commercial)', 'Advertisement (PSA)', 'Educational Use', 'Government', 'Live Presentation', 'Museum Use', 'Non Profit', 'Personal Use', 'Preservation Use'],
-          'shippingOptionLabel': 'Shipping Option',
-          'shippingOptions': ['Download/FTP (User Provided)', 'Download/FTP (Institution Provided)', 'Pick up Onsite', 'Fed Ex (User Account)', 'UPS (User Account)', 'USPS (First Class)', 'USPS (Overseas)' ],
-          'forPublicationLabel': 'For Publication',
-
-          //selector of button used to show dialog
-          'submitButtonSelector': '.aeon_submit',
-
-          'minWidth': 750,
-
-          //event hooks
-          'createDialog': function(){return this;},
-          'destroyDialog': function (){return this;},
-          'onSubmit': function(){return true;},
-
-          //id of form for form processing
-          'form': 'EADRequest',
-
-          //selector for checked items
-          'requestsSelector':'input[name="Request"]',
-
-
-          'cleanValues': function(s){
-            return s.replace(/^\s*/, "").replace(/\s*$/,'');
-          },
-
-          'stripUnchecked':true,
-
-          'selectAllButtonsPosition': '',
-          'selectAllButtonsShowAt': 0,
-          'selectAllButtonsTag': 'button',
-          'selectAllButtonLabel': 'Select All',
-          'selectNoneButtonLabel':'Select None'
-
+                      '</form>'
         }, options);
 
         if ( settings.includeAdvancedCopyOptions ) {
@@ -322,11 +273,11 @@
         if ( !settings.jsonSubmit() )
           return;
 
-        $.getJSON(settings.json_url, settings.json_content,function(data){
+        $.getJSON(settings.jsonUrl, settings.jsonContent,function(data){
           if ( !settings.jsonComplete(data) ) {
             return;
           }
-          var o = settings.json_callback(data);
+          var o = settings.jsonCallback(data);
           if ( o ){
             methods.options.apply($this,[o]);
             methods._showDialog.apply($this,null);
@@ -335,7 +286,7 @@
       }
 
       if ( settings.datasource === 'custom') {
-        var o = settings.custom_callback();
+        var o = settings.customCallback();
         if ( o ){
           methods.options.apply($this,[o]);
           methods._showDialog.apply($this,null);
@@ -363,7 +314,7 @@
         f2 = [ 'min', 'max' ];
 
       $dialog.jqotesub(settings.template, settings);
-      $('#' + settings.dialogId + " " + settings.items_attachpoint_selector).jqotesub(settings.items_template,settings);
+      $('#' + settings.dialogId + " " + settings.itemsAttachpointSelector).jqotesub(settings.itemsTemplate,settings);
 
       //setup dialog
       for (var x=0;x < 2; x++) {

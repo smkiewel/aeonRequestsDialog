@@ -155,10 +155,10 @@ be sure and check the following:
 
 * 'datasource' must be set to 'json'
 
-* 'json_url' must be set to the url to access the JSON. Query parameters should
+* 'jsonUrl' must be set to the url to access the JSON. Query parameters should
   be included in the 'json_content' field.
 
-* 'json_callback' must be set to a function that will transform the result of
+* 'jsonCallback' must be set to a function that will transform the result of
   the json call into the expected data format and return that object. The
   returned object must conform to the following format:
 
@@ -215,8 +215,8 @@ be sure and check the following:
   If a null (or other 'falsey') value is returned from this function, the dialog
   will not be shown.
 
-* 'json_content' holds any additional query args needed to be passed to
-  'json_url' and is a key-value object, e.g.:
+* 'jsonContent' holds any additional query args needed to be passed to
+  'jsonUrl' and is a key-value object, e.g.:
 
         {
           'isAeon': 1,
@@ -246,7 +246,7 @@ If you need custom processing, be sure and set the following:
 
 * 'datasource' needs to be set to 'custom'
 
-* 'custom_callback' - function that fetches, builds, or otherwise readies the
+* 'customCallback' - function that fetches, builds, or otherwise readies the
   data for use by the dialog. Must return an object in the following format:
 
         {
@@ -500,6 +500,18 @@ All methods are called using the default jQuery style. E.g.:
 
   default: 'Loan'
 
+* 'globalFields': fields common to all requests
+
+  default: []
+
+* 'itemFields': fields for individual items
+
+  default: []
+
+* 'items': items to be requested
+
+  default: []
+
 * 'datasource': sets source of data for dialog. Values:
   1. form: use default form processing
   2. json: use default json processsing
@@ -515,15 +527,15 @@ All methods are called using the default jQuery style. E.g.:
 
   default: 'input[name="Request"]',
 
-* 'json_url': url to json
+* 'jsonUrl': url to json
 
   default: null
 
-* 'json_callback': callback for json response to process into correct format
+* 'jsonCallback': callback for json response to process into correct format
 
   default: null
 
-* 'json_content': args to be passed as the content of the json request
+* 'jsonContent': args to be passed as the content of the json request
 
   default: null
 
@@ -537,21 +549,9 @@ All methods are called using the default jQuery style. E.g.:
 
   default: function(data){return true;}
 
-* 'custom_callback': function used in custom processing to provide the data
+* 'customCallback': function used in custom processing to provide the data
 
   default: null
-
-* 'globalFields': fields common to all requests
-
-  default: []
-
-* 'itemFields': fields for individual items
-
-  default: []
-
-* 'items': items to be requested
-
-  default: []
 
 * 'useDefaultBindings': setup default bindings. Set to false if completely
   replacing template.
@@ -592,6 +592,14 @@ All methods are called using the default jQuery style. E.g.:
 
   default: ''
 
+* 'footer': footer message
+
+  default: ''
+
+* 'submitButtonsMessage': message to be displayed above the submit and cancel buttons
+
+  default: ''
+
 * 'submitButtonLabel': label on the dialog's submit button
 
   default: 'Submit Request'
@@ -600,20 +608,12 @@ All methods are called using the default jQuery style. E.g.:
 
   default: 'Cancel Request'
 
-* 'buttonsMessage': message to be displayed above the submit and cancel buttons
-
-  default: ''
-
 * 'submitButtonsTag': html tag to use for creating buttons. Values:
   1. input: form elements of type submit and reset
   2. button: button element
   3. a: anchor tag with href="#"
 
   default: input
-
-* 'footer': footer message
-
-  default: ''
 
 * 'selectAllButtonsPosition': position(s) to show select all/none buttons at. Values:
   1. '': no buttons
@@ -731,11 +731,11 @@ All methods are called using the default jQuery style. E.g.:
           return s.replace(/^\s*/, "").replace(/\s*$/,'');
         }
 
-* 'items_attachpoint_selector': selector for attachpoint of items
+* 'itemsAttachpointSelector': selector for attachpoint of items
 
   default: '.aeon_request_items'
 
-* 'items_template': jqote template for items
+* 'itemsTemplate': jqote template for items
 
   default:
 
