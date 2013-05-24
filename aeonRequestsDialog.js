@@ -93,18 +93,18 @@
                               '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
                                 '<div class="requestItem" style="clear:both">' +
                                   '<div class="request_inputs">' +
-                                    '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + "\n" +
+                                    '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + 
                                     '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
                                       '<input type="hidden" name="<%= this.items[x].fields[y].name %>_<%= x %>" value="<%= this.items[x].fields[y].value %>">' +
                                     '<% } %>' +
-                                  '</div>' + "\n" +
+                                  '</div>' +
                                   '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
                                     '<% if ( this.items[x].fields[y].label ) { %>' +
                                       '<div class="requestDesc"><span class="label"><%= this.items[x].fields[y].label %>:</span> <%= this.items[x].fields[y].value %></div>' +
                                     '<% } %>' +
                                   '<% } %>' +
-                                '</div>' + "\n" +
-                              '<% } %>' + "\n" +
+                                '</div>' +
+                              '<% } %>' +
                             '</div>',
           'template':'<form method="POST" action="<%= this.url %>" class="aeon_request_form" target="_self" name="<%= this.AeonForm %>">' +
                         '<input name="AeonForm" type="hidden" value="<%= this.AeonForm %>"/>' +
