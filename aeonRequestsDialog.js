@@ -86,6 +86,7 @@
           'compressRequestsField': 'ItemNumber',
           'stripUnchecked':true,
           'cleanValues': function(s){ return s.replace(/^\s*/, "").replace(/\s*$/,''); },
+          'cleanNotes': true,
 
           //templates
           'itemsAttachpointSelector': '.aeon_request_items',
@@ -93,7 +94,7 @@
                               '<% for ( var x=0; x < this.items.length; x++ ) { %>' +
                                 '<div class="requestItem" style="clear:both">' +
                                   '<div class="request_inputs">' +
-                                    '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' + 
+                                    '<input type="checkbox" name="Request" value="<%= x %>" checked="checked"/>' +
                                     '<% for ( var y=0; y < this.items[x].fields.length; y++ ){ %>' +
                                       '<input type="hidden" name="<%= this.items[x].fields[y].name %>_<%= x %>" value="<%= this.items[x].fields[y].value %>">' +
                                     '<% } %>' +
@@ -305,7 +306,7 @@
               methods._defaultDestroyDialog.apply($this,null);
             }
             settings.destroyDialog();
-            $(window).off('.aeonRequestsDialog');
+            $(window).off('.aeonRequestsDialog'+'#' + settings.dialogId);
             $dialog.dialog('destroy');
             $dialog.html('');
           }
@@ -402,6 +403,10 @@
           methods._compressRequests.apply($this,null);
         }
 
+        if ( settings.includeNotes && settings.cleanNotes ){
+          methods._cleanNotes.apply($this,null);
+        }
+
         $(idSelector+ ' .aeon_request_form').submit();
       });
 
@@ -494,6 +499,13 @@
       $(uncheckedSelector).each( function(){
         $(idSelector + ' input[name$="_' + $(this).val() +'"]').remove();
       });
+    },
+    _cleanNotes: function(){
+      var settings = this.data('aeonRequestsDialog').settings;
+      var notes = $('#'+settings.dialogId + ' textarea[name="Notes"]');
+      var s = notes.val();
+      s = s.replace(/\n/g, ' ' );
+      notes.val(s);
     },
     options: function(){
       var settings = this.data('aeonRequestsDialog').settings;

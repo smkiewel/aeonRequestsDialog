@@ -399,6 +399,10 @@ This plugin has some extra behaviors and UI elements available for use.
 * Strip unchecked: strips out the hidden form values holding the item information
   for items that are unchecked on the dialog on dialog submission. On by default.
 
+* Clean notes: replaces newlines in the notes field with spaces. Needed because
+  Aeon strips out (or doesn't display) anything past the first newline. On by
+  default.
+
 ## Customization
 
 ### Look
@@ -731,6 +735,10 @@ All methods are called using the default jQuery style. E.g.:
           return s.replace(/^\s*/, "").replace(/\s*$/,'');
         }
 
+* 'cleanNotes': set to true to strip newlines from notes field
+
+  default: true
+
 * 'itemsAttachpointSelector': selector for attachpoint of items
 
   default: '.aeon_request_items'
@@ -754,7 +762,7 @@ All methods are called using the default jQuery style. E.g.:
                 '<% } %>' +
               '<% } %>' +
             '</div>' +
-          '<% } %>' + 
+          '<% } %>' +
         '</div>'
 
 * 'template': jqote template for dialog
