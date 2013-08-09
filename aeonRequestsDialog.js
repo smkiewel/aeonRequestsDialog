@@ -462,7 +462,7 @@
 
       for (var code in codes) {
         var requestNumbers = codes[code];
-        if ( requestNumbers.length < 2 ) {
+        if ( requestNumbers.length < 2 || code == '' ) {
           continue;
         }
 
