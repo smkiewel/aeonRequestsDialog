@@ -454,15 +454,17 @@
       requests.each( function(){
         var requestNumber = $(this).val();
         var collapseFieldValue = $(idSelector + ' input[name="'+fieldName + '_' + requestNumber +'"]').val();
-        if ( !codes[collapseFieldValue] ) {
-          codes[collapseFieldValue] = new Array();
+        if ( collapseFieldValue ){
+          if ( !codes[collapseFieldValue] ) {
+            codes[collapseFieldValue] = new Array();
+          }
+          codes[collapseFieldValue].push(requestNumber);
         }
-        codes[collapseFieldValue].push(requestNumber);
       });
 
       for (var code in codes) {
         var requestNumbers = codes[code];
-        if ( requestNumbers.length < 2 || code == '' ) {
+        if ( requestNumbers.length < 2 ) {
           continue;
         }
 
